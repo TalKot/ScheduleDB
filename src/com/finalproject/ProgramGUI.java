@@ -192,7 +192,6 @@ public class ProgramGUI {
 					else if(ClassGroupChooseUpdate.getSelection())//Class Update option
 					{
 						String query = "UPDATE class SET BuildingNumber="+ClassGroupBuildingNumberText.getText()+",Floor="+ClassGroupFloorText.getText()+" WHERE ClassNumber="+ClassGroupClassNumberText.getText()+";";
-						System.out.println(query);
 						try {
 							Connection2DB.Instance().Exectueuery(query);
 						} 
@@ -318,7 +317,6 @@ public class ProgramGUI {
 						String query = "INSERT INTO Course VALUES ("+CourseGroupCourseNumberText.getText()+",'"+CourseGroupCourseNameText.getText()+"',"+CourseGroupCourseSemesterText.getText()+","+
 								CourseGroupHoursAmountText.getText()+","+CourseGroupDayText.getText()+","+CourseGroupYearText.getText()+","+
 								CourseGroupTimeHourText.getText()+","+CourseGroupTimeMinuteText.getText()+")";
-						System.out.println(query);
 						try {
 							Connection2DB.Instance().Exectueuery(query);
 						} 
@@ -336,9 +334,7 @@ public class ProgramGUI {
 						 "Day="+ CourseGroupDayText.getText()+","+
 						 "Time_Hour="+ CourseGroupTimeHourText.getText()+","+
 						 "Time_Minute="+CourseGroupTimeMinuteText.getText()+
-						 " WHERE CourseNumber="+CourseGroupCourseNumberText.getText()+";";
-						 System.out.println(query);
-						
+						 " WHERE CourseNumber="+CourseGroupCourseNumberText.getText()+";";						
 						try {
 							Connection2DB.Instance().Exectueuery(query);
 						} 
