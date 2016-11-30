@@ -61,6 +61,8 @@ public class ProgramGUI {
 		private ArrayList<Classes> cls;
 		private ArrayList<Lecture> lec;
 		private ArrayList<Course> crs;
+		private Button PairClassLecture;
+		private Button PairClassCourse;
 		
 		public static void main(String[] args) throws SQLException
 		{
@@ -99,48 +101,48 @@ public class ProgramGUI {
 			shell = new Shell(); 
 			shell.setImage(null);	       
 			shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-			shell.setSize(877, 1003);
+			shell.setSize(1040, 1003);
 			shell.setText("DB Final Project");
 			/***********************************For the main display**************************************/
 			LectureGroupView = new Group(shell, SWT.NONE);
 			LectureGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 			LectureGroupView.setText("Lecturer");
-			LectureGroupView.setBounds(23, 36, 262, 314);
+			LectureGroupView.setBounds(23, 36, 390, 314);
 			
 			listLecture = new List(LectureGroupView, SWT.BORDER);
-			listLecture.setBounds(10, 27, 242, 277);
+			listLecture.setBounds(10, 27, 370, 277);
 			
 			ClassGroupView = new Group(shell, SWT.SHADOW_ETCHED_IN);
 			ClassGroupView.setText("Class");
 			ClassGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-			ClassGroupView.setBounds(301, 36, 262, 314);
+			ClassGroupView.setBounds(409, 36, 201, 314);
 			
 			listClass = new List(ClassGroupView, SWT.BORDER);
-			listClass.setBounds(10, 27, 242, 277);
+			listClass.setBounds(10, 27, 188, 277);
 			
 			CourseGroupView = new Group(shell, SWT.NONE);
 			CourseGroupView.setText("Course");
 			CourseGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-			CourseGroupView.setBounds(569, 36, 262, 314);
+			CourseGroupView.setBounds(616, 36, 402, 314);
 			
 			listCourse = new List(CourseGroupView, SWT.BORDER);
-			listCourse.setBounds(10, 27, 242, 277);
+			listCourse.setBounds(10, 27, 389, 277);
 			/************************************************************************************************/
 			ClassGroup = new Group(shell, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
 			ClassGroup.setText("Class Group");
 			ClassGroup.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-			ClassGroup.setBounds(23, 370, 808, 153);
+			ClassGroup.setBounds(23, 400, 995, 123);
 			
 			ClassGroupChooseDelete = new Button(ClassGroup, SWT.RADIO);
-			ClassGroupChooseDelete.setBounds(199, 94, 90, 16);
+			ClassGroupChooseDelete.setBounds(199, 56, 90, 16);
 			ClassGroupChooseDelete.setText("Delete");
 			
 			ClassGroupChooseUpdate = new Button(ClassGroup, SWT.RADIO);
-			ClassGroupChooseUpdate.setBounds(341, 94, 90, 16);
+			ClassGroupChooseUpdate.setBounds(341, 56, 90, 16);
 			ClassGroupChooseUpdate.setText("Update");
 			
 			ClassGroupChooseInsert = new Button(ClassGroup, SWT.RADIO);
-			ClassGroupChooseInsert.setBounds(495, 94, 90, 16);
+			ClassGroupChooseInsert.setBounds(495, 56, 90, 16);
 			ClassGroupChooseInsert.setText("Insert");
 			
 			ClassGroupExecuteButton = new Button(ClassGroup, SWT.NONE);
@@ -202,6 +204,11 @@ public class ProgramGUI {
 						}
 
 					}
+					else{
+						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						ClassGroupResultText.setText("Please choose an action");
+						return;
+					}
 					try{
 						cls = Connection2DB.Instance().getClasses();
 						listClass.removeAll();
@@ -220,53 +227,52 @@ public class ProgramGUI {
 						ClassGroupResultText.setText(e1.getMessage());
 						return;
 					}
-					
 					ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
 					ClassGroupResultText.setText("Action Complete.");
 				}
 			});
 			/************************************************************************************************************/
-			ClassGroupExecuteButton.setBounds(27, 90, 143, 25);
+			ClassGroupExecuteButton.setBounds(27, 52, 143, 25);
 			ClassGroupExecuteButton.setText("Execute");
 			
 			ClassGroupResultText = new Text(ClassGroup, SWT.BORDER);
 			ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
 			ClassGroupResultText.setEditable(false);
 			ClassGroupResultText.setEnabled(false);
-			ClassGroupResultText.setBounds(175, 116, 623, 26);
+			ClassGroupResultText.setBounds(175, 78, 623, 26);
 			
 			ClassGroupResultLable = new CLabel(ClassGroup, SWT.CENTER);
-			ClassGroupResultLable.setBounds(27, 121, 143, 22);
+			ClassGroupResultLable.setBounds(27, 83, 143, 22);
 			ClassGroupResultLable.setText("Query Result");
 			
 			ClassGroupClassNumberLable = new CLabel(ClassGroup, SWT.NONE);
 			ClassGroupClassNumberLable.setAlignment(SWT.CENTER);
-			ClassGroupClassNumberLable.setBounds(10, 34, 93, 21);
+			ClassGroupClassNumberLable.setBounds(10, 25, 93, 21);
 			ClassGroupClassNumberLable.setText("Class Number");
 			
 			ClassGroupClassNumberText = new Text(ClassGroup, SWT.BORDER);
-			ClassGroupClassNumberText.setBounds(109, 34, 121, 21);
+			ClassGroupClassNumberText.setBounds(110, 25, 121, 21);
 			
 			ClassGroupBuildingNumberLable = new CLabel(ClassGroup, SWT.NONE);
 			ClassGroupBuildingNumberLable.setAlignment(SWT.CENTER);
 			ClassGroupBuildingNumberLable.setText("Building Number");
-			ClassGroupBuildingNumberLable.setBounds(236, 34, 97, 21);
+			ClassGroupBuildingNumberLable.setBounds(237, 25, 97, 21);
 			
 			ClassGroupBuildingNumberText = new Text(ClassGroup, SWT.BORDER);
-			ClassGroupBuildingNumberText.setBounds(339, 34, 121, 21);
+			ClassGroupBuildingNumberText.setBounds(344, 25, 121, 21);
 			
 			ClassGroupFloorLable = new CLabel(ClassGroup, SWT.NONE);
 			ClassGroupFloorLable.setAlignment(SWT.CENTER);
 			ClassGroupFloorLable.setText("Floor");
-			ClassGroupFloorLable.setBounds(488, 34, 76, 21);
+			ClassGroupFloorLable.setBounds(489, 25, 76, 21);
 			
 			ClassGroupFloorText = new Text(ClassGroup, SWT.BORDER);
-			ClassGroupFloorText.setBounds(570, 34, 121, 21);
+			ClassGroupFloorText.setBounds(573, 25, 121, 21);
 			
 			CourseGroup = new Group(shell, SWT.BORDER | SWT.SHADOW_ETCHED_OUT);
 			CourseGroup.setText("Course Group");
 			CourseGroup.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-			CourseGroup.setBounds(23, 538, 808, 188);
+			CourseGroup.setBounds(23, 538, 995, 188);
 			
 			CourseGroupChooseDelete = new Button(CourseGroup, SWT.RADIO);
 			CourseGroupChooseDelete.setText("Delete");
@@ -343,6 +349,11 @@ public class ProgramGUI {
 							CourseGroupResultText.setText(e1.getMessage());
 							return;
 						}
+					}
+					else{
+						CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						CourseGroupResultText.setText("Please choose an action");
+						return;
 					}
 					try{
 						listCourse.removeAll();
@@ -448,7 +459,7 @@ public class ProgramGUI {
 			LectureGroup = new Group(shell, SWT.BORDER | SWT.SHADOW_IN);
 			LectureGroup.setText("Lecture Group");
 			LectureGroup.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-			LectureGroup.setBounds(23, 741, 808, 188);
+			LectureGroup.setBounds(23, 741, 995, 188);
 			
 			LectureGroupChooseDelete = new Button(LectureGroup, SWT.RADIO);
 			LectureGroupChooseDelete.setText("Delete");
@@ -517,6 +528,11 @@ public class ProgramGUI {
 							LectureGroupResultText.setText(e1.getMessage());
 							return;
 						}
+					}
+					else{
+						LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						LectureGroupResultText.setText("Please choose an action");
+						return;
 					}
 					try{
 						listLecture.removeAll();
@@ -618,6 +634,28 @@ public class ProgramGUI {
 			LectureGroupAdressNameLable.setAlignment(SWT.CENTER);
 			LectureGroupAdressNameLable.setBounds(236, 88, 97, 21);
 			
+			PairClassLecture = new Button(shell, SWT.NONE);
+			PairClassLecture.setText("Pair Class Lecture");
+			PairClassLecture.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) 
+				{
+					//need to complete the code
+				}
+			});
+			PairClassLecture.setBounds(297, 356, 158, 25);
+			
+			PairClassCourse = new Button(shell, SWT.NONE);
+			PairClassCourse.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) 
+				{
+					//need to complete the code
+				}
+			});
+			PairClassCourse.setText("Pair Class Course");
+			PairClassCourse.setBounds(553, 356, 158, 25);
+			
 
 			try {
 				cls = Connection2DB.Instance().getClasses();
@@ -639,6 +677,8 @@ public class ProgramGUI {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
+			//					System.out.println("Information is - "+listClass.getSelectionIndex());
 
 			
 		}

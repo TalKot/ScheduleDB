@@ -67,9 +67,9 @@ public class Lecture {
 	}
 	@Override
 	public String toString() {
-		return "ID=" + ID + ", FirstName=" + FirstName + ", LastName=" + LastName + ", BirthdayDay="
-				+ BirthdayDay + ", BirthdayMonth=" + BirthdayMonth + ", BirthdayYear=" + BirthdayYear + ", AdressCity="
-				+ AdressCity + ", AdressStreetNumber=" + AdressStreetNumber + ", AdressName=" + AdressName;
+		return  FirstName + " " + LastName +",ID=" + ID + "," +  ", Birthday="
+				+ BirthdayDay + "." + BirthdayMonth + "." + BirthdayYear + ", Adress="
+				 +AdressName+" "+ AdressStreetNumber +"," + AdressCity;
 	}
 
 }

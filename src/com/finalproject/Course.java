@@ -61,9 +61,9 @@ public class Course
 	}
 	@Override
 	public String toString() {
-		return "Number=" + CourseNumber + ", Name=" + Name + ", Semester=" + Semester + ", HourseAmount="
-				+ HourseAmount + ", Year=" + Year + ", Day=" + Day + ", Time_Hour=" + Time_Hour + ", Time_Minute="
-				+ Time_Minute + "]";
+		return 	Name+ ", Number=" + CourseNumber + ", Sem.=" + Semester + ", Hours="
+				+ HourseAmount + ", Year=" + Year + ", Day=" + Day + ", Time=" + Time_Hour + ":"
+				+ Time_Minute;
 	}
 	
 	
