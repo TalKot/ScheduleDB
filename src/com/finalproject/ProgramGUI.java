@@ -11,6 +11,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import java.awt.Image;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import org.eclipse.swt.custom.CLabel;
@@ -19,12 +20,13 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.widgets.List;
 
 
 public class ProgramGUI {
 	
 		protected Shell shell;
-		private Group LecturerGroupView,ClassGroupView,CourseGroupView,ClassGroup,CourseGroup;
+		private Group LectureGroupView,ClassGroupView,CourseGroupView,ClassGroup,CourseGroup;
 		private Button ClassGroupChooseInsert,ClassGroupChooseUpdate,ClassGroupChooseDelete,ClassGroupExecuteButton;
 		private Text ClassGroupResultText,ClassGroupClassNumberText,ClassGroupBuildingNumberText,ClassGroupFloorText,CourseGroupResultText,CourseGroupCourseNumberText,CourseGroupCourseNameText,CourseGroupCourseSemesterText,CourseGroupYearText,CourseGroupHoursAmountText,CourseGroupDayText,CourseGroupTimeHourText,CourseGroupTimeMinuteText;
 		private CLabel ClassGroupResultLable, ClassGroupClassNumberLable, ClassGroupBuildingNumberLable,ClassGroupFloorLable;
@@ -53,13 +55,22 @@ public class ProgramGUI {
 		private Text LectureGroupAdressNumberText;
 		private CLabel LectureGroupAdressNameLable;
 		private Text LectureGroupAdressNameText;
-
+		private List listLecture;
+		private List listCourse;
+		private List listClass;
+		private ArrayList<Classes> cls;
+		private ArrayList<Lecture> lec;
+		private ArrayList<Course> crs;
 		
-		public static void main(String[] args)
+		public static void main(String[] args) throws SQLException
 		{
 			ProgramGUI GUI = new ProgramGUI();
-			
 		}
+
+		
+		/**
+		 * @wbp.parser.entryPoint
+		 */
 		public ProgramGUI()
 		{
 			try{
@@ -91,20 +102,29 @@ public class ProgramGUI {
 			shell.setSize(877, 1003);
 			shell.setText("DB Final Project");
 			/***********************************For the main display**************************************/
-			LecturerGroupView = new Group(shell, SWT.NONE);
-			LecturerGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-			LecturerGroupView.setText("Lecturer");
-			LecturerGroupView.setBounds(23, 36, 262, 314);
+			LectureGroupView = new Group(shell, SWT.NONE);
+			LectureGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+			LectureGroupView.setText("Lecturer");
+			LectureGroupView.setBounds(23, 36, 262, 314);
+			
+			listLecture = new List(LectureGroupView, SWT.BORDER);
+			listLecture.setBounds(10, 27, 242, 277);
 			
 			ClassGroupView = new Group(shell, SWT.SHADOW_ETCHED_IN);
 			ClassGroupView.setText("Class");
 			ClassGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 			ClassGroupView.setBounds(301, 36, 262, 314);
 			
+			listClass = new List(ClassGroupView, SWT.BORDER);
+			listClass.setBounds(10, 27, 242, 277);
+			
 			CourseGroupView = new Group(shell, SWT.NONE);
 			CourseGroupView.setText("Course");
 			CourseGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 			CourseGroupView.setBounds(569, 36, 262, 314);
+			
+			listCourse = new List(CourseGroupView, SWT.BORDER);
+			listCourse.setBounds(10, 27, 242, 277);
 			/************************************************************************************************/
 			ClassGroup = new Group(shell, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
 			ClassGroup.setText("Class Group");
@@ -146,6 +166,7 @@ public class ProgramGUI {
 						try {
 							Connection2DB.Instance().Exectueuery(query1);
 							Connection2DB.Instance().Exectueuery(query2);
+
 						} 
 						catch (SQLException e1) {
 							ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -153,12 +174,14 @@ public class ProgramGUI {
 							return;
 						}
 						
+
+						
 					}
 					else if (ClassGroupChooseInsert.getSelection())//Class Insert option
 					{
 						String query = "INSERT INTO class VALUES ("+ClassGroupClassNumberText.getText()+","+ClassGroupBuildingNumberText.getText()+","+ClassGroupFloorText.getText()+")";
 						try {
-							Connection2DB.Instance().Exectueuery(query);
+							Connection2DB.Instance().Exectueuery(query);							
 						} 
 						catch (SQLException e1) {
 							ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -180,6 +203,25 @@ public class ProgramGUI {
 						}
 
 					}
+					try{
+						cls = Connection2DB.Instance().getClasses();
+						listClass.removeAll();
+						for (Classes classes : cls) 
+						{
+							listClass.add(classes.toString());
+						}
+					}
+					catch (SQLException e1) {
+						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						ClassGroupResultText.setText(e1.getMessage());
+						return;
+					}
+					catch (Exception e1) {
+						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						ClassGroupResultText.setText(e1.getMessage());
+						return;
+					}
+					
 					ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
 					ClassGroupResultText.setText("Action Complete.");
 				}
@@ -241,7 +283,7 @@ public class ProgramGUI {
 			
 			CourseGroupExecuteButton = new Button(CourseGroup, SWT.NONE);
 			
-			/***********************************Execute Button  of Class group******************************************/
+			/***********************************Execute Button  of Course group******************************************/
 			CourseGroupExecuteButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
@@ -273,9 +315,10 @@ public class ProgramGUI {
 					}
 					else if (CourseGroupChooseInsert.getSelection())//Course Insert option
 					{
-						String query = "INSERT INTO Course VALUES ("+CourseGroupCourseNumberText.getText()+","+CourseGroupCourseNameText.getText()+","+CourseGroupCourseSemesterText.getText()+","+
+						String query = "INSERT INTO Course VALUES ("+CourseGroupCourseNumberText.getText()+",'"+CourseGroupCourseNameText.getText()+"',"+CourseGroupCourseSemesterText.getText()+","+
 								CourseGroupHoursAmountText.getText()+","+CourseGroupDayText.getText()+","+CourseGroupYearText.getText()+","+
 								CourseGroupTimeHourText.getText()+","+CourseGroupTimeMinuteText.getText()+")";
+						System.out.println(query);
 						try {
 							Connection2DB.Instance().Exectueuery(query);
 						} 
@@ -304,6 +347,24 @@ public class ProgramGUI {
 							CourseGroupResultText.setText(e1.getMessage());
 							return;
 						}
+					}
+					try{
+						listCourse.removeAll();
+						crs= Connection2DB.Instance().getCourse();
+						for (Course course : crs) 
+						{
+							listCourse.add(course.toString());
+						}
+					}
+					catch (SQLException e1) {
+						CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						CourseGroupResultText.setText(e1.getMessage());
+						return;
+					}
+					catch (Exception e1) {
+						CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						CourseGroupResultText.setText(e1.getMessage());
+						return;
 					}
 					
 					CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
@@ -461,6 +522,24 @@ public class ProgramGUI {
 							return;
 						}
 					}
+					try{
+						listLecture.removeAll();
+						lec = Connection2DB.Instance().getLecture();
+						for (Lecture lecture : lec) 
+						{
+							listLecture.add(lecture.toString());
+						}
+					}
+					catch (SQLException e1) {
+						LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						LectureGroupResultText.setText(e1.getMessage());
+						return;
+					}
+					catch (Exception e1) {
+						LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						LectureGroupResultText.setText(e1.getMessage());
+						return;
+					}
 					LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
 					LectureGroupResultText.setText("Action Complete.");
 				}
@@ -542,6 +621,29 @@ public class ProgramGUI {
 			LectureGroupAdressNameLable.setText("Adress Name");
 			LectureGroupAdressNameLable.setAlignment(SWT.CENTER);
 			LectureGroupAdressNameLable.setBounds(236, 88, 97, 21);
+			
+
+			try {
+				cls = Connection2DB.Instance().getClasses();
+				for (Classes classes : cls) 
+				{
+					listClass.add(classes.toString());
+				}
+				lec = Connection2DB.Instance().getLecture();
+				for (Lecture lecture : lec) 
+				{
+					listLecture.add(lecture.toString());
+				}
+				crs= Connection2DB.Instance().getCourse();
+				for (Course course : crs) 
+				{
+					listCourse.add(course.toString());
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 			
 		}
 }

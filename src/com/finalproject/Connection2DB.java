@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -155,48 +156,75 @@ public class Connection2DB {
 			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
 		} 
 	}
-	public Classes[] getClasses() throws SQLException
+	public ArrayList<Classes> getClasses() throws SQLException
 	{
-		System.out.println("i'm here2");
 		connection=DriverManager.getConnection(protocol,USER,PASS);
 		connection.setAutoCommit(false);
 	    statement = connection.createStatement();
-
-	      String sql = "SELECT * from class";
-	      ResultSet rs = statement.executeQuery(sql);
-	      while(rs.next()){
-	    	  Classes classtemp = new Classes();
-		      int first = rs.getInt("ClassNumber");
-		      //int last = rs.getString("Floor");
-		      int last = rs.getInt("Floor");
-	         //Retrieve by column name
-	        // int id  = rs.getInt("id");
-	        // int age = rs.getInt("age");
-
-
-	         //Display values
-		      System.out.println("*************************************");
-	         System.out.print("ClassNumber: " + first);
-	         System.out.print("Floor: " + last);
-
-	      }
-/*
-		//List Classes  
-		ResultSet rs= statement.execute("select * from class");
-
-
-		System.out.println("There are " + users.size() + " users(s)");
-		
-		Iterator i = users.iterator();
-		while(i.hasNext()) 
-		{
-			System.out.println(i.next());
-		}
-		
-		session.getTransaction().commit();
-		*/
-		
-		return null;
+	    String sql = "SELECT * from class";
+	    ResultSet rs = statement.executeQuery(sql);
+	    ArrayList<Classes> cls = new ArrayList<Classes>();
+	    while(rs.next())
+	    {
+	    	Classes classtemp = new Classes();
+	    	classtemp.setBuildingNumber(rs.getInt("BuildingNumber"));
+	    	classtemp.setClassNumber(rs.getInt("ClassNumber"));
+	    	classtemp.setFloor(rs.getInt("Floor"));
+	    	cls.add(classtemp);
+	    }
+	    connection.close();
+	    return cls;
 	}
-
+	
+	public ArrayList<Lecture> getLecture() throws SQLException 	
+	{
+		connection=DriverManager.getConnection(protocol,USER,PASS);
+		connection.setAutoCommit(false);
+	    statement = connection.createStatement();
+	    String sql = "SELECT * from lecture";
+	    ResultSet rs = statement.executeQuery(sql);
+	    ArrayList<Lecture> crs = new ArrayList<Lecture>();
+	    while(rs.next())
+	    {
+	    	Lecture Lecturetemp = new Lecture();
+	    	Lecturetemp.setAdressCity(rs.getString("Address_City"));
+	    	Lecturetemp.setAdressName(rs.getString("Address_Name"));
+	    	Lecturetemp.setBirthdayDay(rs.getInt("Birthdate_Day"));
+	    	Lecturetemp.setBirthdayMonth(rs.getInt("Birthdate_Month"));
+	    	Lecturetemp.setBirthdayYear(rs.getInt("Birthdate_Year"));
+	    	Lecturetemp.setFirstName(rs.getString("Name_FirstName"));
+	    	Lecturetemp.setID(rs.getInt("ID"));
+	    	Lecturetemp.setLastName(rs.getString("Name_LastName"));
+	    	Lecturetemp.setAdressStreetNumber(rs.getInt("Address_street_Number"));
+	    	crs.add(Lecturetemp);
+	    }
+	    connection.close();
+	    return crs;
+	}
+	
+	public ArrayList<Course> getCourse() throws SQLException 	
+	{
+		connection=DriverManager.getConnection(protocol,USER,PASS);
+		connection.setAutoCommit(false);
+	    statement = connection.createStatement();
+	    String sql = "SELECT * from course";
+	    ResultSet rs = statement.executeQuery(sql);
+	    ArrayList<Course> crs = new ArrayList<Course>();
+	    while(rs.next())
+	    {
+	    	Course Coursetemp = new Course();
+	    	Coursetemp.setSemester(rs.getString("Semester"));
+	    	Coursetemp.setName(rs.getString("Name"));
+	    	Coursetemp.setCourseNumber(rs.getInt("CourseNumber"));
+	    	Coursetemp.setHourseAmount(rs.getInt("HourseAmount"));
+	    	Coursetemp.setYear(rs.getInt("Year"));
+	    	Coursetemp.setDay(rs.getInt("Day"));
+	    	Coursetemp.setTime_Hour(rs.getInt("Time_Hour"));
+	    	Coursetemp.setTime_Minute(rs.getInt("Time_Minute"));
+	    	crs.add(Coursetemp);
+	    }
+	    connection.close();
+	    return crs;
+	    
+	}
 }

@@ -24,7 +24,7 @@ public class Classes {
 	}
 	@Override
 	public String toString() {
-		return "Classes [classNumber=" + classNumber + ", BuildingNumber=" + BuildingNumber + ", Floor=" + Floor + "]";
+		return "Class=" + classNumber + ", Building=" + BuildingNumber + ", Floor=" + Floor;
 	}
 	
 
