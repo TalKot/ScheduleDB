@@ -176,13 +176,13 @@ public class Connection2DB {
 	    return cls;
 	}
 	
-	public ArrayList<Lecture> getLecture() throws SQLException 	
+	public ArrayList<Lecture> getLecture(String query) throws SQLException 	
 	{
+		if (query.equals(""))query = "SELECT * from lecture";
 		connection=DriverManager.getConnection(protocol,USER,PASS);
 		connection.setAutoCommit(false);
 	    statement = connection.createStatement();
-	    String sql = "SELECT * from lecture";
-	    ResultSet rs = statement.executeQuery(sql);
+	    ResultSet rs = statement.executeQuery(query);
 	    ArrayList<Lecture> crs = new ArrayList<Lecture>();
 	    while(rs.next())
 	    {
@@ -224,7 +224,49 @@ public class Connection2DB {
 	    	crs.add(Coursetemp);
 	    }
 	    connection.close();
-	    return crs;
-	    
+	    return crs; 
 	}
+	
+	
+	public ArrayList<Schedule> getSchedule() throws SQLException 	
+	{
+		connection=DriverManager.getConnection(protocol,USER,PASS);
+		connection.setAutoCommit(false);
+	    statement = connection.createStatement();
+	    String sql = "SELECT * FROM course left JOIN takeplace ON CourseNumber=takeplace.Course_CourseNumber left JOIN class ON ClassNumber=takeplace.Class_ClassNumber left JOIN teaching ON CourseNumber=teaching.Course_CourseNumber left JOIN lecture ON ID=teaching.Lecture_ID ORDER BY course.CourseNumber;";
+	    ResultSet rs = statement.executeQuery(sql);
+	    ArrayList<Schedule> sch = new ArrayList<Schedule>();
+	    while(rs.next())
+	    {   	
+
+	    	Schedule schedule = new Schedule();
+			//course information 
+	    	schedule.setCourseNumber(rs.getInt("CourseNumber"));
+	    	schedule.setName(rs.getString("Name"));
+	    	schedule.setSemester(rs.getString("Semester"));
+	    	schedule.setHoursAmount(rs.getInt("HourseAmount"));
+	    	schedule.setYear(rs.getInt("Year"));
+	    	schedule.setDay(rs.getInt("Day"));
+	    	schedule.setTime_Hour(rs.getInt("Time_Hour"));
+	    	schedule.setTime_Minute(rs.getInt("Time_Minute"));
+	    	//Lecture information
+	    	schedule.setLecture_ID(rs.getInt("Lecture_ID"));
+	    	schedule.setFirstName(rs.getString("Name_FirstName"));
+	    	schedule.setLastName(rs.getString("Name_LastName"));
+	    	schedule.setBirthdayDay(rs.getInt("Birthdate_Day"));
+	    	schedule.setBirthdayMonth(rs.getInt("Birthdate_Month"));
+	    	schedule.setBirthdayYear(rs.getInt("Birthdate_Year"));
+	    	schedule.setAdressCity(rs.getString("Address_City"));
+	    	schedule.setAdressStreetName(rs.getString("Address_Name"));
+	    	schedule.setAdressStreetNumber(rs.getInt("Address_street_Number"));
+	    	//class information
+	    	schedule.setFloor(rs.getInt("Floor"));
+	    	schedule.setBuildingNumber(rs.getInt("BuildingNumber"));
+	    	schedule.setClassNumber(rs.getInt("Class_ClassNumber"));
+	    	sch.add(schedule);
+	    }
+	    connection.close();
+	    return sch; 
+	}
+	
 }

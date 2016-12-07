@@ -61,18 +61,16 @@ public class ProgramGUI {
 		private ArrayList<Classes> cls;
 		private ArrayList<Lecture> lec;
 		private ArrayList<Course> crs;
-		private Button PairClassLecture;
+		private Button PairCourseLecture;
 		private Button PairClassCourse;
+		private Button FindLectures;
 		
 		public static void main(String[] args) throws SQLException
 		{
 			ProgramGUI GUI = new ProgramGUI();
 		}
 
-		
-		/**
-		 * @wbp.parser.entryPoint
-		 */
+
 		public ProgramGUI()
 		{
 			try{
@@ -101,7 +99,8 @@ public class ProgramGUI {
 			shell = new Shell(); 
 			shell.setImage(null);	       
 			shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-			shell.setSize(1040, 1003);
+			shell.setSize(1040, 1015);
+			shell.setLocation(200, 0);
 			shell.setText("DB Final Project");
 			/***********************************For the main display**************************************/
 			LectureGroupView = new Group(shell, SWT.NONE);
@@ -536,7 +535,7 @@ public class ProgramGUI {
 					}
 					try{
 						listLecture.removeAll();
-						lec = Connection2DB.Instance().getLecture();
+						lec = Connection2DB.Instance().getLecture("");
 						for (Lecture lecture : lec) 
 						{
 							listLecture.add(lecture.toString());
@@ -634,27 +633,68 @@ public class ProgramGUI {
 			LectureGroupAdressNameLable.setAlignment(SWT.CENTER);
 			LectureGroupAdressNameLable.setBounds(236, 88, 97, 21);
 			
-			PairClassLecture = new Button(shell, SWT.NONE);
-			PairClassLecture.setText("Pair Class Lecture");
-			PairClassLecture.addSelectionListener(new SelectionAdapter() {
+			PairCourseLecture = new Button(shell, SWT.NONE);
+			PairCourseLecture.setText("Pair Course Lecture");
+			//************PairClassLecture*******************************************//
+			PairCourseLecture.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					//need to complete the code
+					String query = "INSERT INTO teaching VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+lec.get(listLecture.getSelectionIndex()).getID()+")";
+					try {
+						Connection2DB.Instance().Exectueuery(query);
+					} 
+					catch (SQLException e1) {
+						e1.printStackTrace();
+						return;
+					}
 				}
 			});
-			PairClassLecture.setBounds(297, 356, 158, 25);
+			PairCourseLecture.setBounds(297, 356, 158, 25);
 			
 			PairClassCourse = new Button(shell, SWT.NONE);
+			//************PairClassCourse*******************************************//
 			PairClassCourse.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					//need to complete the code
+					String query = "INSERT INTO takeplace VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+cls.get(listClass.getSelectionIndex()).getClassNumber()+")";
+					try {
+						Connection2DB.Instance().Exectueuery(query);
+					} 
+					catch (SQLException e1) {
+						e1.printStackTrace();
+						return;
+					}
 				}
 			});
 			PairClassCourse.setText("Pair Class Course");
 			PairClassCourse.setBounds(553, 356, 158, 25);
+			
+			Button ShowFullSchedule = new Button(shell, SWT.NONE);
+			ShowFullSchedule.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) 
+				{
+					ShowFullSchedule abc = new ShowFullSchedule();
+					abc.open();
+				}
+			});
+			ShowFullSchedule.setBounds(75, 942, 182, 25);
+			ShowFullSchedule.setText("Show Full Schedule");
+/*************************************************************************************************************************************/			
+			FindLectures = new Button(shell, SWT.NONE);
+			FindLectures.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					//need to complete the code
+					ShowQueryAnswer qyeryAnswer = new ShowQueryAnswer();
+					qyeryAnswer.open();
+				}
+			});
+			FindLectures.setText("Find Lectures");
+			FindLectures.setBounds(297, 942, 182, 25);
 			
 
 			try {
@@ -663,7 +703,7 @@ public class ProgramGUI {
 				{
 					listClass.add(classes.toString());
 				}
-				lec = Connection2DB.Instance().getLecture();
+				lec = Connection2DB.Instance().getLecture("");
 				for (Lecture lecture : lec) 
 				{
 					listLecture.add(lecture.toString());
@@ -673,12 +713,11 @@ public class ProgramGUI {
 				{
 					listCourse.add(course.toString());
 				}
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
+			} catch (SQLException e1) 
+			{
 				e1.printStackTrace();
 			}
 			
-			//					System.out.println("Information is - "+listClass.getSelectionIndex());
 
 			
 		}
