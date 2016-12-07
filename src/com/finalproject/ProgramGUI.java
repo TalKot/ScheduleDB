@@ -26,44 +26,22 @@ import org.eclipse.swt.widgets.List;
 public class ProgramGUI {
 	
 		protected Shell shell;
-		private Group LectureGroupView,ClassGroupView,CourseGroupView,ClassGroup,CourseGroup;
-		private Button ClassGroupChooseInsert,ClassGroupChooseUpdate,ClassGroupChooseDelete,ClassGroupExecuteButton;
-		private Text ClassGroupResultText,ClassGroupClassNumberText,ClassGroupBuildingNumberText,ClassGroupFloorText,CourseGroupResultText,CourseGroupCourseNumberText,CourseGroupCourseNameText,CourseGroupCourseSemesterText,CourseGroupYearText,CourseGroupHoursAmountText,CourseGroupDayText,CourseGroupTimeHourText,CourseGroupTimeMinuteText;
-		private CLabel ClassGroupResultLable, ClassGroupClassNumberLable, ClassGroupBuildingNumberLable,ClassGroupFloorLable;
-		private Button CourseGroupChooseDelete,CourseGroupChooseUpdate,CourseGroupChooseInsert, CourseGroupExecuteButton;
-		private CLabel CourseGroupResultLable,CourseGroupCourseNumberLable,CourseGroupCourseNameLable,CourseGroupCourseSemesterLable,CourseGroupYearLable,CourseGroupDayLable,CourseGroupHoursAmountLable,CourseGroupTimeLable,label_2;
-		private Group LectureGroup;
-		private Button LectureGroupChooseDelete;
-		private Button LectureGroupChooseUpdate;
-		private Button LectureGroupChooseInsert;
-		private Button LectureGroupExecuteButton;
-		private Text LectureGroupResultText;
-		private CLabel LectureGroupResultLable;
-		private CLabel LectureGroupIDLable;
-		private Text LectureGroupIDText;
-		private CLabel LectureGroupFirstNameLable;
-		private Text LectureGroupFirstNameText;
-		private CLabel LectureGroupLastNameLable;
-		private Text LectureGroupLastNameText;
-		private Text LectureGroupBirthdayDayText;
-		private CLabel LectureGroupBirhtdayLable;
-		private Text LectureGroupBirthdayMonthText;
-		private Text LectureGroupBirthdayYearText;
-		private CLabel LectureGroupAdressCityLable;
-		private Text LectureGroupAdressCityText;
-		private CLabel LectureGroupAdressNumberLable;
-		private Text LectureGroupAdressNumberText;
-		private CLabel LectureGroupAdressNameLable;
-		private Text LectureGroupAdressNameText;
-		private List listLecture;
-		private List listCourse;
-		private List listClass;
+		private Group LectureGroupView,ClassGroupView,CourseGroupView,ClassGroup,CourseGroup,LectureGroup;
+		private Button ClassGroupChooseInsert,ClassGroupChooseUpdate,ClassGroupChooseDelete,ClassGroupExecuteButton,
+		FindLectures,PairClassCourse,PairCourseLecture,CourseGroupChooseDelete,CourseGroupChooseUpdate,
+		CourseGroupChooseInsert,CourseGroupExecuteButton,LectureGroupChooseDelete,LectureGroupExecuteButton,LectureGroupChooseUpdate,LectureGroupChooseInsert;
+		private Text ClassGroupResultText,ClassGroupClassNumberText,ClassGroupBuildingNumberText,
+		ClassGroupFloorText,CourseGroupResultText,CourseGroupCourseNumberText,CourseGroupCourseNameText,CourseGroupCourseSemesterText,
+		CourseGroupYearText,CourseGroupHoursAmountText,CourseGroupDayText,LectureGroupResultText,LectureGroupIDText,
+		LectureGroupFirstNameText,LectureGroupBirthdayDayText,LectureGroupBirthdayMonthText,LectureGroupBirthdayYearText,
+		CourseGroupTimeHourText,CourseGroupTimeMinuteText,LectureGroupLastNameText,LectureGroupAdressCityText,LectureGroupAdressNumberText,LectureGroupAdressNameText;
+		private CLabel ClassGroupResultLable, ClassGroupClassNumberLable, ClassGroupBuildingNumberLable,ClassGroupFloorLable,LectureGroupBirhtdayLable,
+		CourseGroupResultLable,CourseGroupCourseNumberLable,CourseGroupCourseNameLable,CourseGroupCourseSemesterLable,CourseGroupYearLable,CourseGroupDayLable,CourseGroupHoursAmountLable,CourseGroupTimeLable,label_2,
+		LectureGroupResultLable,LectureGroupIDLable,LectureGroupFirstNameLable,LectureGroupLastNameLable,LectureGroupAdressCityLable,LectureGroupAdressNumberLable,LectureGroupAdressNameLable;
+		private List listLecture,listClass,listCourse;
 		private ArrayList<Classes> cls;
 		private ArrayList<Lecture> lec;
 		private ArrayList<Course> crs;
-		private Button PairCourseLecture;
-		private Button PairClassCourse;
-		private Button FindLectures;
 		
 		public static void main(String[] args) throws SQLException
 		{
@@ -209,7 +187,7 @@ public class ProgramGUI {
 						return;
 					}
 					try{
-						cls = Connection2DB.Instance().getClasses();
+						cls = Connection2DB.Instance().getClasses("");
 						listClass.removeAll();
 						for (Classes classes : cls) 
 						{
@@ -356,7 +334,7 @@ public class ProgramGUI {
 					}
 					try{
 						listCourse.removeAll();
-						crs= Connection2DB.Instance().getCourse();
+						crs= Connection2DB.Instance().getCourse("");
 						for (Course course : crs) 
 						{
 							listCourse.add(course.toString());
@@ -698,7 +676,7 @@ public class ProgramGUI {
 			
 
 			try {
-				cls = Connection2DB.Instance().getClasses();
+				cls = Connection2DB.Instance().getClasses("");
 				for (Classes classes : cls) 
 				{
 					listClass.add(classes.toString());
@@ -708,7 +686,7 @@ public class ProgramGUI {
 				{
 					listLecture.add(lecture.toString());
 				}
-				crs= Connection2DB.Instance().getCourse();
+				crs= Connection2DB.Instance().getCourse("");
 				for (Course course : crs) 
 				{
 					listCourse.add(course.toString());
@@ -717,9 +695,6 @@ public class ProgramGUI {
 			{
 				e1.printStackTrace();
 			}
-			
-
-			
 		}
 }
 

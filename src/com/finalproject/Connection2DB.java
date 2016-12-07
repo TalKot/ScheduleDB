@@ -156,13 +156,14 @@ public class Connection2DB {
 			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
 		} 
 	}
-	public ArrayList<Classes> getClasses() throws SQLException
+	
+	public ArrayList<Classes> getClasses(String query) throws SQLException
 	{
+		if (query.equals(""))query = "SELECT * from class;";
 		connection=DriverManager.getConnection(protocol,USER,PASS);
 		connection.setAutoCommit(false);
 	    statement = connection.createStatement();
-	    String sql = "SELECT * from class";
-	    ResultSet rs = statement.executeQuery(sql);
+	    ResultSet rs = statement.executeQuery(query);
 	    ArrayList<Classes> cls = new ArrayList<Classes>();
 	    while(rs.next())
 	    {
@@ -178,7 +179,7 @@ public class Connection2DB {
 	
 	public ArrayList<Lecture> getLecture(String query) throws SQLException 	
 	{
-		if (query.equals(""))query = "SELECT * from lecture";
+		if (query.equals(""))query = "SELECT * from lecture;";
 		connection=DriverManager.getConnection(protocol,USER,PASS);
 		connection.setAutoCommit(false);
 	    statement = connection.createStatement();
@@ -202,13 +203,13 @@ public class Connection2DB {
 	    return crs;
 	}
 	
-	public ArrayList<Course> getCourse() throws SQLException 	
+	public ArrayList<Course> getCourse(String query) throws SQLException 	
 	{
+		if (query.equals(""))query = "SELECT * from course;";
 		connection=DriverManager.getConnection(protocol,USER,PASS);
 		connection.setAutoCommit(false);
 	    statement = connection.createStatement();
-	    String sql = "SELECT * from course";
-	    ResultSet rs = statement.executeQuery(sql);
+	    ResultSet rs = statement.executeQuery(query);
 	    ArrayList<Course> crs = new ArrayList<Course>();
 	    while(rs.next())
 	    {
