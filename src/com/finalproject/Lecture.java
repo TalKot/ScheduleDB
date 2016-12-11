@@ -1,12 +1,12 @@
 package com.finalproject;
 
+import java.sql.Date;
+
 public class Lecture {
 	private int ID;
 	private String FirstName;
 	private String LastName;
-	private int BirthdayDay;
-	private int BirthdayMonth;
-	private int BirthdayYear;
+	private Date Birthday;
 	private String AdressCity;
 	private int AdressStreetNumber;
 	private String AdressName;
@@ -29,24 +29,7 @@ public class Lecture {
 	public void setLastName(String lastName) {
 		LastName = lastName;
 	}
-	public int getBirthdayDay() {
-		return BirthdayDay;
-	}
-	public void setBirthdayDay(int birthdayDay) {
-		BirthdayDay = birthdayDay;
-	}
-	public int getBirthdayMonth() {
-		return BirthdayMonth;
-	}
-	public void setBirthdayMonth(int birthdayMonth) {
-		BirthdayMonth = birthdayMonth;
-	}
-	public int getBirthdayYear() {
-		return BirthdayYear;
-	}
-	public void setBirthdayYear(int birthdayYear) {
-		BirthdayYear = birthdayYear;
-	}
+	
 	public String getAdressCity() {
 		return AdressCity;
 	}
@@ -68,8 +51,14 @@ public class Lecture {
 	@Override
 	public String toString() {
 		return  FirstName + " " + LastName +",ID=" + ID + ", Birthday="
-				+ BirthdayDay + "." + BirthdayMonth + "." + BirthdayYear + ", Adress="
+				+ Birthday+ ", Adress="
 				 +AdressName+" "+ AdressStreetNumber +"," + AdressCity;
+	}
+	public Date getBirthday() {
+		return Birthday;
+	}
+	public void setBirthday(Date birthday) {
+		Birthday = birthday;
 	}
 
 }

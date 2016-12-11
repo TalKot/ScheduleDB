@@ -24,7 +24,7 @@ public class ShowQueryAnswer {
 	private Text EndGroupHourText;
 	private Text EndGroupMinuteText;
 	private ArrayList<Lecture> lec;
-
+	private List list;
 
 	public void open() {
 		Display display = Display.getDefault();
@@ -47,7 +47,7 @@ public class ShowQueryAnswer {
 		shell.setSize(710, 456);
 		shell.setText("SWT Application");
 		
-		List list = new List(shell, SWT.BORDER);
+		list = new List(shell, SWT.BORDER);
 		list.setBounds(10, 148, 674, 259);
 		
 		Group StartGroup = new Group(shell, SWT.NONE);
@@ -105,7 +105,11 @@ public class ShowQueryAnswer {
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
-				String sqlQuery = "SELECT * FROM lecture left JOIN teaching ON ID=teaching.Lecture_ID left JOIN course ON Course_CourseNumber=course.CourseNumber where Day>="+StartGroupDayText.getText()+" AND Day<="+EndGroupDayText.getText()+";";//+" AND Time_Hour>="+StartGroupHourText.getText()+" AND Time_Hour<="+EndGroupHourText.getText()+" AND Time_Minute>= "+StartGroupMinuteText.getText()+" AND Time_Minute<="+EndGroupMinuteText.getText()+";";
+				//String sqlQuery = "SELECT * FROM lecture left JOIN teaching ON ID=teaching.Lecture_ID left JOIN course ON Course_CourseNumber=course.CourseNumber where Day>="+StartGroupDayText.getText()+" AND Day<="+EndGroupDayText.getText()+";";//+" AND Time_Hour>="+StartGroupHourText.getText()+" AND Time_Hour<="+EndGroupHourText.getText()+" AND Time_Minute>= "+StartGroupMinuteText.getText()+" AND Time_Minute<="+EndGroupMinuteText.getText()+";";
+//"+StartGroupMinuteText.getText()+" AND Time_Minute<="+EndGroupMinuteText.getText()+";";
+
+				//
+				String sqlQuery = "SELECT teaching.Lecture_ID, course.* FROM teaching RIGHT JOIN course ON teaching.Course_CourseNumber=course.CourseNumber	WHERE (course.Day >"+StartGroupDayText.getText()+" AND course.Time_Hour>="+StartGroupHourText.getText()+") AND (course.Day<"+EndGroupDayText.getText()+" AND course.Time_Hour<"+EndGroupHourText.getText()+") ORDER BY teaching.Lecture_ID;";				System.out.println(sqlQuery);
 				System.out.println(sqlQuery);
 				try {
 					list.removeAll();

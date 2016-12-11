@@ -11,6 +11,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import java.awt.Image;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -494,16 +496,18 @@ public class ProgramGUI {
 					{
 						/*Prepared Statement to insert new Lecture*/
 						try {
-							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO Lecture(ID ,Name_FirstName,Name_LastName,Birthdate_Day ,Birthdate_Month ,Birthdate_Year , Address_City,Address_street_Number,Address_Name)VALUES (?,?,?,?,?,?,?,?,?);");				
+							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO Lecture(ID ,Name_FirstName,Name_LastName,Birthday, Address_City,Address_street_Number,Address_Name)VALUES (?,?,?,?,?,?,?);");				
 							pStmt.setInt(1,Integer.parseInt(LectureGroupIDText.getText()));
 							pStmt.setString(2,LectureGroupFirstNameText.getText());
 							pStmt.setString(3,LectureGroupLastNameText.getText());
-							pStmt.setInt(4,Integer.parseInt(LectureGroupBirthdayDayText.getText()));
-							pStmt.setInt(5,Integer.parseInt(LectureGroupBirthdayMonthText.getText()));
-							pStmt.setInt(6,Integer.parseInt(LectureGroupBirthdayYearText.getText()));
-							pStmt.setString(7,LectureGroupAdressCityText.getText());
-							pStmt.setInt(8,Integer.parseInt(LectureGroupAdressNumberText.getText()));
-							pStmt.setString(9,LectureGroupAdressNameText.getText());
+							/////
+							SimpleDateFormat format = new SimpleDateFormat( "MM/dd/yyyy" );  
+							java.util.Date myDate = format.parse( LectureGroupBirthdayMonthText.getText()+"/"+LectureGroupBirthdayDayText.getText()+"/"+LectureGroupBirthdayYearText.getText()); 
+							java.sql.Date sqlDate = new java.sql.Date( myDate.getTime()); 
+							pStmt.setDate(4,sqlDate);
+							pStmt.setString(5,LectureGroupAdressCityText.getText());
+							pStmt.setInt(6,Integer.parseInt(LectureGroupAdressNumberText.getText()));
+							pStmt.setString(7,LectureGroupAdressNameText.getText());
 							pStmt.executeUpdate();
 							pStmt.close();
 						}
@@ -511,6 +515,8 @@ public class ProgramGUI {
 							LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
 							LectureGroupResultText.setText(e1.getMessage());
 							return;
+						} catch (ParseException e1) {
+							e1.printStackTrace();
 						}
 					}
 					else if(LectureGroupChooseUpdate.getSelection())//Lecture Update option

@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +17,7 @@ public class Connection2DB {
 	
 	
 	private final String driver = "com.mysql.jdbc.Driver";  	
-	private final String protocol = "jdbc:mysql://localhost:3306/aabb"; 	
+	private final String protocol = "jdbc:mysql://localhost:3306/abc"; 	
 	private final String USER = "root"; 	
 	private final String PASS = "admin"; 
 	private Connection connection = null; 
@@ -26,7 +27,10 @@ public class Connection2DB {
 
 	public static Connection2DB Instance() throws SQLException
 	{
-		if (DBConnectors == null) return new Connection2DB();
+		if (DBConnectors == null) 
+		{
+			return new Connection2DB();
+		}
 		return DBConnectors;
 	}
 		
@@ -42,9 +46,9 @@ public class Connection2DB {
 				Class.forName(driver);//loading the driver to memory 
 				connection=DriverManager.getConnection(protocol,USER,PASS);
 				connection.setAutoCommit(false);
-				tableCreation();//method for creating the tables in DB
-				enterData();//method for entering data to DB
-				System.out.println("Creation complete");
+				//tableCreation();//method for creating the tables in DB
+				//enterData();//method for entering data to DB
+				//System.out.println("Creation complete");
 			} 
 			catch(Exception e)
 			{
@@ -53,26 +57,33 @@ public class Connection2DB {
 			}
 			finally 	
 			{ 	
-				if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
-				if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 		
+				if(statement!=null) try{statement.close();}catch(Exception e){/*e.printStackTrace();*/} 
+				if(connection!=null) try{connection.close();}catch(Exception e){/*e.printStackTrace();*/} 		
 	 		} 
 		
 	 }
  
 	public void tableCreation() throws SQLException
 	{
+		try{
 		statement = connection.createStatement();
 		/*creation of the tables*/
-		statement.execute("create table Class(ClassNumber int,BuildingNumber int,Floor int,PRIMARY KEY (ClassNumber))"); 		
-		statement.execute("create table Course(CourseNumber int,Name varchar(255), Semester CHAR,HourseAmount int,Year int,Day int,Time_Hour int,Time_Minute int,PRIMARY KEY (CourseNumber))"); 
-		statement.execute("create table Lecture(ID int,Name_FirstName varchar(255),Name_LastName varchar(255),Birthdate_Day int,Birthdate_Month int,Birthdate_Year int, Address_City varchar(255),Address_street_Number int,Address_Name varchar(255),PRIMARY KEY (ID))"); 		
-		statement.execute("create table Takeplace(Course_CourseNumber int, Class_ClassNumber int,PRIMARY KEY (Course_CourseNumber,Class_ClassNumber))"); 		
-		statement.execute("create table Teaching(Course_CourseNumber int, Lecture_ID int,PRIMARY KEY (Course_CourseNumber,Lecture_ID))"); 
-		statement.execute("create table LecturePhone(LectureID int,PhoneNumber int,PRIMARY KEY (LectureID,PhoneNumber))"); 
+		statement.execute("create table IF NOT EXISTS Class(ClassNumber int,BuildingNumber int,Floor int,PRIMARY KEY (ClassNumber))"); 		
+		statement.execute("create table IF NOT EXISTS Course(CourseNumber int,Name varchar(255), Semester CHAR,HourseAmount int,Year int,Day int,Time_Hour int,Time_Minute int,PRIMARY KEY (CourseNumber));");//,CONSTRAINT FOREIGN KEY (CourseNumber)REFERENCES Teaching(Course_CourseNumber));"); 
+		statement.execute("create table IF NOT EXISTS Lecture(ID int,Name_FirstName varchar(255),Name_LastName varchar(255),Birthday DATE, Address_City varchar(255),Address_street_Number int,Address_Name varchar(255),PRIMARY KEY (ID));"); 		
+		statement.execute("create table IF NOT EXISTS Takeplace(Course_CourseNumber int, Class_ClassNumber int,PRIMARY KEY (Course_CourseNumber,Class_ClassNumber))"); 		
+		statement.execute("create table IF NOT EXISTS Teaching(Course_CourseNumber int, Lecture_ID int,PRIMARY KEY (Course_CourseNumber,Lecture_ID))"); 
+		statement.execute("create table IF NOT EXISTS LecturePhone(LectureID int,PhoneNumber int,PRIMARY KEY (LectureID,PhoneNumber))"); 
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace(); 
+		}
 	}
 	
 	public void enterData() throws SQLException
 	{
+		try{
 		statement = connection.createStatement();
 		/*insert into class table*/
 		statement.executeUpdate("INSERT INTO class VALUES (200,3,2)");
@@ -96,17 +107,110 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO course VALUES(5008,'courseG','S',2,4,3,10,00)"); 		
 		statement.executeUpdate("INSERT INTO course VALUES(5009,'courseH','S',2,4,4,15,30)"); 		
 		statement.executeUpdate("INSERT INTO course VALUES(5010,'courseI','S',3,2,5,12,00)"); 
-		/*insert into Lecture table*/
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444440,'Shalom','Shloshe',23,2,1972,'Tel-Aviv',34,'Mozkin')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444441,'Amit','Lapidot',3,12,1990,'Beit-Shean',18,'Arlozerov')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444442,'Naor','Yoni',5,4,1982,'Bear-Sheva',1,'Bavli')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444443,'Shalomi','Sheldon',15,4,1978,'Tel-Aviv',23,'Lamed')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444444,'Uri','Dudi',24,3,1970,'Tel-Aviv',50,'Ramat Aviv')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444445,'Uri','Hamoiv',3,9,1975,'Tel-Aviv',5,'Ramat Aviv G')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444446,'Cris','Nedved',1,9,1980,'Ashdod',30,'New Ramat Aviv')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444447,'David','Del-Piero',26,7,1983,'Ashdod',20,'Shalom')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444448,'Aviv','Davids',6,5,1982,'Ofakim',18,'Arlozrov')"); 
-		statement.executeUpdate("INSERT INTO Lecture VALUES(305444449,'Dekel','Cafu',30,6,1981,'Ofakim',80,'Ana Frank')"); 
+		/*insert into Lecture table*/		
+		SimpleDateFormat format = new SimpleDateFormat( "MM/dd/yyyy" );  
+		java.util.Date myDate = format.parse( "10/10/2009" ); 
+		
+		PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement("INSERT INTO Lecture(ID,Name_FirstName,Name_LastName,Birthday, Address_City,Address_street_Number,Address_Name) VALUES (?,?,?,?,?,?,?);");
+		pstmt.setInt( 1, 305444440 );
+		pstmt.setString( 2, "Shalom"); 
+		pstmt.setString( 3, "Shloshe" ); 
+		java.sql.Date sqlDate = new java.sql.Date( myDate.getTime() ); 
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Tel-Aviv");
+		pstmt.setInt(6, 34);
+		pstmt.setString(7, "Mozkin");
+		pstmt.executeUpdate();
+		///////////////////////////////////////////////
+		pstmt.setInt( 1, 305444441 );
+		pstmt.setString( 2, "Shalom1"); 
+		pstmt.setString( 3, "Shloshe1" ); // please use "getFir…" instead of "GetFir…", per Java conventions.
+		sqlDate = new java.sql.Date( myDate.getTime() ); // Notice the ".sql." (not "util") in package name.
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Tel-Aviv1");
+		pstmt.setInt(6, 341);
+		pstmt.setString(7, "Mozkin1");
+		pstmt.executeUpdate();
+		/////////////////////////////////////////////////
+		pstmt.setInt( 1, 305444442 );
+		pstmt.setString( 2, "Naor"); 
+		pstmt.setString( 3, "Yoni" ); // please use "getFir…" instead of "GetFir…", per Java conventions.
+		sqlDate = new java.sql.Date( myDate.getTime() ); // Notice the ".sql." (not "util") in package name.
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Bear-Sheva");
+		pstmt.setInt(6, 1);
+		pstmt.setString(7, "Bavli");
+		pstmt.executeUpdate();
+		//////////////////////////////////////
+		pstmt.setInt( 1, 305444443 );
+		pstmt.setString( 2, "Shalomi"); 
+		pstmt.setString( 3, "Sheldon" ); // please use "getFir…" instead of "GetFir…", per Java conventions.
+		sqlDate = new java.sql.Date( myDate.getTime() ); // Notice the ".sql." (not "util") in package name.
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Tel-Aviv");
+		pstmt.setInt(6, 23);
+		pstmt.setString(7, "Lamed");
+		pstmt.executeUpdate();
+		////////////////////////////
+		pstmt.setInt( 1, 305444444 );
+		pstmt.setString( 2, "Uri"); 
+		pstmt.setString( 3, "Dudi" ); 
+		sqlDate = new java.sql.Date( myDate.getTime() ); 
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Tel-Aviv");
+		pstmt.setInt(6, 50);
+		pstmt.setString(7, "Ramat Aviv");
+		pstmt.executeUpdate();
+		////////////////////////////
+		pstmt.setInt( 1, 305444445 );
+		pstmt.setString( 2, "Hamoiv"); 
+		pstmt.setString( 3, "Dudidi" ); 
+		sqlDate = new java.sql.Date( myDate.getTime() );
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Ashdod");
+		pstmt.setInt(6, 5);
+		pstmt.setString(7, "Ramat Aviv G");
+		pstmt.executeUpdate();	
+		////////////////////////////
+		pstmt.setInt( 1, 305444446 );
+		pstmt.setString( 2, "Cris"); 
+		pstmt.setString( 3, "Nedved" ); 
+		sqlDate = new java.sql.Date( myDate.getTime() );
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Ashdod");
+		pstmt.setInt(6, 30);
+		pstmt.setString(7, "New Ramat Aviv");
+		pstmt.executeUpdate();	
+		////////////////////////////
+		pstmt.setInt( 1, 305444447 );
+		pstmt.setString( 2, "David"); 
+		pstmt.setString( 3, "Del-Piero" ); 
+		sqlDate = new java.sql.Date( myDate.getTime() );
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Ashdod");
+		pstmt.setInt(6, 30);
+		pstmt.setString(7, "Shalom");
+		pstmt.executeUpdate();	
+		////////////////////////////
+		pstmt.setInt( 1, 305444448 );
+		pstmt.setString( 2, "Aviv"); 
+		pstmt.setString( 3, "Davids" ); 
+		sqlDate = new java.sql.Date( myDate.getTime() );
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Ofakim");
+		pstmt.setInt(6, 18);
+		pstmt.setString(7, "Arlozrov");
+		pstmt.executeUpdate();
+		////////////////////////////
+		pstmt.setInt( 1, 305444449 );
+		pstmt.setString( 2, "Dekel"); 
+		pstmt.setString( 3, "Cafu" ); 
+		sqlDate = new java.sql.Date( myDate.getTime() );
+		pstmt.setDate( 4, sqlDate ); 
+		pstmt.setString(5, "Ranana");
+		pstmt.setInt(6, 18);
+		pstmt.setString(7, "Ana Frank");
+		pstmt.executeUpdate();
 		/*insert into TakePlace table*/
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5000,200)"); 
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5001,201)"); 
@@ -147,6 +251,11 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444448,723885958)");
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444449,345776543)");	
 		connection.commit();	
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}	
 	
 	public void Exectueuery(String Query) throws SQLException
@@ -198,9 +307,7 @@ public class Connection2DB {
 	    	Lecture Lecturetemp = new Lecture();
 	    	Lecturetemp.setAdressCity(rs.getString("Address_City"));
 	    	Lecturetemp.setAdressName(rs.getString("Address_Name"));
-	    	Lecturetemp.setBirthdayDay(rs.getInt("Birthdate_Day"));
-	    	Lecturetemp.setBirthdayMonth(rs.getInt("Birthdate_Month"));
-	    	Lecturetemp.setBirthdayYear(rs.getInt("Birthdate_Year"));
+	    	Lecturetemp.setBirthday(rs.getDate("Birthday"));
 	    	Lecturetemp.setFirstName(rs.getString("Name_FirstName"));
 	    	Lecturetemp.setID(rs.getInt("ID"));
 	    	Lecturetemp.setLastName(rs.getString("Name_LastName"));
