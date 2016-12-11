@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mysql.jdbc.PreparedStatement;
+
 
 public class Connection2DB { 
 	
@@ -19,15 +21,21 @@ public class Connection2DB {
 	private final String PASS = "admin"; 
 	private Connection connection = null; 
 	private Statement statement = null; 
+	
 	private static Connection2DB DBConnectors ;
 
-	 public static Connection2DB Instance() throws SQLException
+	public static Connection2DB Instance() throws SQLException
 	{
 		if (DBConnectors == null) return new Connection2DB();
 		return DBConnectors;
 	}
 		
-	 private Connection2DB() throws SQLException
+	 public Connection getConnection() throws SQLException {
+		connection=DriverManager.getConnection(protocol,USER,PASS);
+		return connection;
+	}
+
+	private Connection2DB() throws SQLException
 	 {
 		 try
 			{ 
@@ -44,10 +52,10 @@ public class Connection2DB {
 				connection.rollback();
 			}
 			finally 	
-			{ 
-				if(statement!=null) try{statement.close();}catch(Exception e){/*e.printStackTrace();*/} 
-				if(connection!=null) try{connection.close();}catch(Exception e){/*e.printStackTrace();*/} 	
-			} 
+			{ 	
+				if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
+				if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 		
+	 		} 
 		
 	 }
  

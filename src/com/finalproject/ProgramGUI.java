@@ -21,6 +21,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.widgets.List;
+import java.sql.PreparedStatement;
+
 
 
 public class ProgramGUI {
@@ -45,14 +47,8 @@ public class ProgramGUI {
 		
 		public static void main(String[] args) throws SQLException
 		{
-			ProgramGUI GUI = new ProgramGUI();
-		}
-
-
-		public ProgramGUI()
-		{
 			try{
-			this.open();
+				new ProgramGUI().open();
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -80,7 +76,7 @@ public class ProgramGUI {
 			shell.setSize(1040, 1015);
 			shell.setLocation(200, 0);
 			shell.setText("DB Final Project");
-			/***********************************For the main display**************************************/
+			/***********************************For the main display - Gropus**************************************/
 			LectureGroupView = new Group(shell, SWT.NONE);
 			LectureGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 			LectureGroupView.setText("Lecturer");
@@ -124,7 +120,7 @@ public class ProgramGUI {
 			
 			ClassGroupExecuteButton = new Button(ClassGroup, SWT.NONE);
 			
-			/***********************************Execute Button  of Class group******************************************/
+			/***********************************Execute Button of Class group******************************************/
 			ClassGroupExecuteButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
@@ -156,11 +152,16 @@ public class ProgramGUI {
 
 						
 					}
+					/*Prepared Statement to insert  new class*/
 					else if (ClassGroupChooseInsert.getSelection())//Class Insert option
 					{
-						String query = "INSERT INTO class VALUES ("+ClassGroupClassNumberText.getText()+","+ClassGroupBuildingNumberText.getText()+","+ClassGroupFloorText.getText()+")";
 						try {
-							Connection2DB.Instance().Exectueuery(query);							
+							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO class(ClassNumber,BuildingNumber,Floor) VALUES (?,?,?);");				
+							pStmt.setInt(1,Integer.parseInt(ClassGroupClassNumberText.getText()));
+							pStmt.setInt(2,Integer.parseInt(ClassGroupBuildingNumberText.getText()));
+							pStmt.setInt(3,Integer.parseInt(ClassGroupFloorText.getText()));
+							pStmt.executeUpdate();
+							pStmt.close();
 						} 
 						catch (SQLException e1) {
 							ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -181,14 +182,15 @@ public class ProgramGUI {
 						}
 
 					}
-					else{
+					else
+					{
 						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
 						ClassGroupResultText.setText("Please choose an action");
 						return;
 					}
 					try{
-						cls = Connection2DB.Instance().getClasses("");
 						listClass.removeAll();
+						cls = Connection2DB.Instance().getClasses("");
 						for (Classes classes : cls) 
 						{
 							listClass.add(classes.toString());
@@ -295,13 +297,22 @@ public class ProgramGUI {
 							return;
 						}
 					}
+					
 					else if (CourseGroupChooseInsert.getSelection())//Course Insert option
 					{
-						String query = "INSERT INTO Course VALUES ("+CourseGroupCourseNumberText.getText()+",'"+CourseGroupCourseNameText.getText()+"',"+CourseGroupCourseSemesterText.getText()+","+
-								CourseGroupHoursAmountText.getText()+","+CourseGroupDayText.getText()+","+CourseGroupYearText.getText()+","+
-								CourseGroupTimeHourText.getText()+","+CourseGroupTimeMinuteText.getText()+")";
+						/*Prepared Statement to insert new Course*/
 						try {
-							Connection2DB.Instance().Exectueuery(query);
+							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO Course(CourseNumber,Name, Semester ,HourseAmount ,Year ,Day ,Time_Hour,Time_Minute) VALUES (?,?,?,?,?,?,?,?);");				
+							pStmt.setInt(1,Integer.parseInt(CourseGroupCourseNumberText.getText()));
+							pStmt.setString(2,CourseGroupCourseNameText.getText());
+							pStmt.setInt(3,Integer.parseInt(CourseGroupCourseSemesterText.getText()));
+							pStmt.setInt(4,Integer.parseInt(CourseGroupHoursAmountText.getText()));
+							pStmt.setInt(5,Integer.parseInt(CourseGroupDayText.getText()));
+							pStmt.setInt(6,Integer.parseInt(CourseGroupYearText.getText()));
+							pStmt.setInt(7,Integer.parseInt(CourseGroupTimeHourText.getText()));
+							pStmt.setInt(8,Integer.parseInt(CourseGroupTimeMinuteText.getText()));
+							pStmt.executeUpdate();
+							pStmt.close();
 						} 
 						catch (SQLException e1) {
 							CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -452,7 +463,7 @@ public class ProgramGUI {
 			
 			LectureGroupExecuteButton = new Button(LectureGroup, SWT.NONE);
 			
-			/***********************************Execute Button  of Lecture group******************************************/
+			/***********************************Execute Button of Lecture group******************************************/
 			LectureGroupExecuteButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
@@ -481,10 +492,21 @@ public class ProgramGUI {
 					}
 					else if (LectureGroupChooseInsert.getSelection())//Lecture Insert option
 					{
-						String query = "INSERT INTO lecture VALUES ("+LectureGroupIDText.getText()+","+"'"+LectureGroupFirstNameText.getText()+"',"+"'"+LectureGroupLastNameText.getText()+"',"+LectureGroupBirthdayDayText.getText()+","+LectureGroupBirthdayMonthText.getText()+","+LectureGroupBirthdayYearText.getText()+","+"'"+LectureGroupAdressCityText.getText()+"',"+LectureGroupAdressNumberText.getText()+","+"'"+LectureGroupAdressNameText.getText()+"')";
+						/*Prepared Statement to insert new Lecture*/
 						try {
-							Connection2DB.Instance().Exectueuery(query);
-						} 
+							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO Lecture(ID ,Name_FirstName,Name_LastName,Birthdate_Day ,Birthdate_Month ,Birthdate_Year , Address_City,Address_street_Number,Address_Name)VALUES (?,?,?,?,?,?,?,?,?);");				
+							pStmt.setInt(1,Integer.parseInt(LectureGroupIDText.getText()));
+							pStmt.setString(2,LectureGroupFirstNameText.getText());
+							pStmt.setString(3,LectureGroupLastNameText.getText());
+							pStmt.setInt(4,Integer.parseInt(LectureGroupBirthdayDayText.getText()));
+							pStmt.setInt(5,Integer.parseInt(LectureGroupBirthdayMonthText.getText()));
+							pStmt.setInt(6,Integer.parseInt(LectureGroupBirthdayYearText.getText()));
+							pStmt.setString(7,LectureGroupAdressCityText.getText());
+							pStmt.setInt(8,Integer.parseInt(LectureGroupAdressNumberText.getText()));
+							pStmt.setString(9,LectureGroupAdressNameText.getText());
+							pStmt.executeUpdate();
+							pStmt.close();
+						}
 						catch (SQLException e1) {
 							LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
 							LectureGroupResultText.setText(e1.getMessage());
@@ -618,7 +640,7 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					String query = "INSERT INTO teaching VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+lec.get(listLecture.getSelectionIndex()).getID()+")";
+					String query = "INSERT INTO teaching VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+lec.get(listLecture.getSelectionIndex()).getID()+");";
 					try {
 						Connection2DB.Instance().Exectueuery(query);
 					} 
@@ -676,16 +698,19 @@ public class ProgramGUI {
 			
 
 			try {
+				listClass.removeAll();
 				cls = Connection2DB.Instance().getClasses("");
 				for (Classes classes : cls) 
 				{
 					listClass.add(classes.toString());
 				}
+				listLecture.removeAll();
 				lec = Connection2DB.Instance().getLecture("");
 				for (Lecture lecture : lec) 
 				{
 					listLecture.add(lecture.toString());
 				}
+				listCourse.removeAll();
 				crs= Connection2DB.Instance().getCourse("");
 				for (Course course : crs) 
 				{
