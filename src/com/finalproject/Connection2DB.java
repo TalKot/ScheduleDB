@@ -5,19 +5,18 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+
 
 import com.mysql.jdbc.PreparedStatement;
 
 
 public class Connection2DB { 
 	
-	
 	private final String driver = "com.mysql.jdbc.Driver";  	
-	private final String protocol = "jdbc:mysql://localhost:3306/abc"; 	
+	private final String protocol = "jdbc:mysql://localhost:3306/aaa"; 	
 	private final String USER = "root"; 	
 	private final String PASS = "admin"; 
 	private Connection connection = null; 
@@ -27,17 +26,11 @@ public class Connection2DB {
 
 	public static Connection2DB Instance() throws SQLException
 	{
-		if (DBConnectors == null) 
-		{
-			return new Connection2DB();
-		}
+		if (DBConnectors == null) return new Connection2DB();
 		return DBConnectors;
 	}
 		
-	 public Connection getConnection() throws SQLException {
-		connection=DriverManager.getConnection(protocol,USER,PASS);
-		return connection;
-	}
+
 
 	private Connection2DB() throws SQLException
 	 {
@@ -46,13 +39,12 @@ public class Connection2DB {
 				Class.forName(driver);//loading the driver to memory 
 				connection=DriverManager.getConnection(protocol,USER,PASS);
 				connection.setAutoCommit(false);
-				//tableCreation();//method for creating the tables in DB
+				tableCreation();//method for creating the tables in DB
 				//enterData();//method for entering data to DB
-				//System.out.println("Creation complete");
 			} 
 			catch(Exception e)
 			{
-				//e.printStackTrace(); 
+				e.printStackTrace(); 
 				connection.rollback();
 			}
 			finally 	
@@ -65,27 +57,21 @@ public class Connection2DB {
  
 	public void tableCreation() throws SQLException
 	{
-		try{
 		statement = connection.createStatement();
 		/*creation of the tables*/
 		statement.execute("create table IF NOT EXISTS Class(ClassNumber int,BuildingNumber int,Floor int,PRIMARY KEY (ClassNumber))"); 		
-		statement.execute("create table IF NOT EXISTS Course(CourseNumber int,Name varchar(255), Semester CHAR,HourseAmount int,Year int,Day int,Time_Hour int,Time_Minute int,PRIMARY KEY (CourseNumber));");//,CONSTRAINT FOREIGN KEY (CourseNumber)REFERENCES Teaching(Course_CourseNumber));"); 
+		statement.execute("create table IF NOT EXISTS Course(CourseNumber int,Name varchar(255), Semester CHAR,HourseAmount int,Year int,Day int,Time_Hour int,Time_Minute int,PRIMARY KEY (CourseNumber));");
 		statement.execute("create table IF NOT EXISTS Lecture(ID int,Name_FirstName varchar(255),Name_LastName varchar(255),Birthday DATE, Address_City varchar(255),Address_street_Number int,Address_Name varchar(255),PRIMARY KEY (ID));"); 		
-		statement.execute("create table IF NOT EXISTS Takeplace(Course_CourseNumber int, Class_ClassNumber int,PRIMARY KEY (Course_CourseNumber,Class_ClassNumber))"); 		
-		statement.execute("create table IF NOT EXISTS Teaching(Course_CourseNumber int, Lecture_ID int,PRIMARY KEY (Course_CourseNumber,Lecture_ID))"); 
+		statement.execute("create table IF NOT EXISTS Takeplace(Course_CourseNumber int, Class_ClassNumber int,PRIMARY KEY (Course_CourseNumber,Class_ClassNumber))");
+		//statement.execute("create table IF NOT EXISTS Teaching(Course_CourseNumber int, Lecture_ID int,PRIMARY KEY (Course_CourseNumber,Lecture_ID),FOREIGN KEY(Lecture_ID) references Lecture(ID),FOREIGN KEY(Course_CourseNumber) references Course(CourseNumber)on delete cascade on update cascade);"); 
+		statement.execute("create table IF NOT EXISTS Teaching(Course_CourseNumber int, Lecture_ID int,PRIMARY KEY (Course_CourseNumber,Lecture_ID));"); 
 		statement.execute("create table IF NOT EXISTS LecturePhone(LectureID int,PhoneNumber int,PRIMARY KEY (LectureID,PhoneNumber))"); 
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace(); 
-		}
 	}
 	
-	public void enterData() throws SQLException
+	public void enterData() throws SQLException, ParseException
 	{
-		try{
 		statement = connection.createStatement();
-		/*insert into class table*/
+		/*INSERT into class table*/
 		statement.executeUpdate("INSERT INTO class VALUES (200,3,2)");
 		statement.executeUpdate("INSERT INTO class VALUES (201,3,2)");
 		statement.executeUpdate("INSERT INTO class VALUES (202,2,2)");
@@ -96,7 +82,7 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO class VALUES (302,2,3)");
 		statement.executeUpdate("INSERT INTO class VALUES (303,2,3)");
 		statement.executeUpdate("INSERT INTO class VALUES (304,2,3)");
-		/*insert into Course table*/
+		/*INSERT into Course table*/
 		statement.executeUpdate("INSERT INTO course VALUES(5000,'courseA','A',5,2,1,18,00)"); 		
 		statement.executeUpdate("INSERT INTO course VALUES(5001,'courseB','A',2,3,1,12,00)"); 		
 		statement.executeUpdate("INSERT INTO course VALUES(5002,'courseB','A',3,1,1,18,30)"); 		
@@ -107,7 +93,7 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO course VALUES(5008,'courseG','S',2,4,3,10,00)"); 		
 		statement.executeUpdate("INSERT INTO course VALUES(5009,'courseH','S',2,4,4,15,30)"); 		
 		statement.executeUpdate("INSERT INTO course VALUES(5010,'courseI','S',3,2,5,12,00)"); 
-		/*insert into Lecture table*/		
+		/*INSERT into Lecture table*/		
 		SimpleDateFormat format = new SimpleDateFormat( "MM/dd/yyyy" );  
 		java.util.Date myDate = format.parse( "10/10/2009" ); 
 		
@@ -211,7 +197,7 @@ public class Connection2DB {
 		pstmt.setInt(6, 18);
 		pstmt.setString(7, "Ana Frank");
 		pstmt.executeUpdate();
-		/*insert into TakePlace table*/
+		/*INSERT into TakePlace table*/
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5000,200)"); 
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5001,201)"); 
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5002,202)"); 
@@ -223,7 +209,7 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5008,303)"); 
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5009,304)"); 
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5010,200)"); 
-		/*insert into Teaching table*/
+		/*INSERT into Teaching table*/
 		statement.executeUpdate("INSERT INTO Teaching VALUES(5000,305444440)"); 
 		statement.executeUpdate("INSERT INTO Teaching VALUES(5001,305444441)"); 
 		statement.executeUpdate("INSERT INTO Teaching VALUES(5002,305444442)"); 
@@ -235,7 +221,7 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO Teaching VALUES(5008,305444448)"); 
 		statement.executeUpdate("INSERT INTO Teaching VALUES(5009,305444449)"); 
 		statement.executeUpdate("INSERT INTO Teaching VALUES(5010,305444449)"); 
-		/*insert into LecturePhone table*/
+		/*INSERT into LecturePhone table*/
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444440,305468050)"); 
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444440,0526336132)");
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444441,0543334557)");
@@ -251,11 +237,6 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444448,723885958)");
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444449,345776543)");	
 		connection.commit();	
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}	
 	
 	public void Exectueuery(String Query) throws SQLException
@@ -272,6 +253,11 @@ public class Connection2DB {
 			if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
 			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
 		} 
+	}
+	
+	 public Connection getConnection() throws SQLException {
+		connection=DriverManager.getConnection(protocol,USER,PASS);
+		return connection;
 	}
 	
 	public ArrayList<Classes> getClasses(String query) throws SQLException
@@ -343,7 +329,7 @@ public class Connection2DB {
 	    return crs; 
 	}
 	
-	
+	/*Answer to query about full schedule*/
 	public ArrayList<Schedule> getSchedule() throws SQLException 	
 	{
 		connection=DriverManager.getConnection(protocol,USER,PASS);
@@ -369,9 +355,7 @@ public class Connection2DB {
 	    	schedule.setLecture_ID(rs.getInt("Lecture_ID"));
 	    	schedule.setFirstName(rs.getString("Name_FirstName"));
 	    	schedule.setLastName(rs.getString("Name_LastName"));
-	    	schedule.setBirthdayDay(rs.getInt("Birthdate_Day"));
-	    	schedule.setBirthdayMonth(rs.getInt("Birthdate_Month"));
-	    	schedule.setBirthdayYear(rs.getInt("Birthdate_Year"));
+	    	schedule.setBirthday(rs.getDate("Birthday"));
 	    	schedule.setAdressCity(rs.getString("Address_City"));
 	    	schedule.setAdressStreetName(rs.getString("Address_Name"));
 	    	schedule.setAdressStreetNumber(rs.getInt("Address_street_Number"));
@@ -384,5 +368,27 @@ public class Connection2DB {
 	    connection.close();
 	    return sch; 
 	}
+	
+	
+	public ArrayList<ClassInformationQuery> getClassInformation() throws SQLException 	
+	{
+		connection=DriverManager.getConnection(protocol,USER,PASS);
+		connection.setAutoCommit(false);
+	    statement = connection.createStatement();
+	    String sql= "SELECT takeplace.Class_ClassNumber, teaching.* FROM takeplace right JOIN teaching ON teaching.Course_CourseNumber=takeplace.Course_CourseNumber ORDER BY takeplace.Class_ClassNumber;";
+	    ResultSet rs = statement.executeQuery(sql);
+	    ArrayList<ClassInformationQuery> sch = new ArrayList<ClassInformationQuery>();
+	    while(rs.next())
+	    {   	
+	    	ClassInformationQuery classData = new ClassInformationQuery();
+	    	classData.setClassNumber(rs.getInt("Class_ClassNumber"));
+	    	classData.setCourseNumber(rs.getInt("Course_CourseNumber"));
+	    	classData.setLectureID(rs.getInt("Lecture_ID"));
+	    	sch.add(classData);
+	    }
+	    connection.close();
+	    return sch; 
+	}
+
 	
 }

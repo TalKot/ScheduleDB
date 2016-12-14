@@ -1,9 +1,12 @@
 package com.finalproject;
 
+import java.sql.Date;
+
 public class Schedule {
 	private int CourseNumber, HoursAmount,Year,Day,Time_Hour,Time_Minute,Lecture_ID,classNumber;
-	private int BuildingNumber, floor, BirthdayDay,BirthdayMonth,BirthdayYear,AdressStreetNumber;
+	private int BuildingNumber, floor,AdressStreetNumber;
 	private String firstName, lastName, AdressStreetName,AdressCity, Name, Semester;
+	private Date birthday;
 	
 	public int getCourseNumber() {
 		return CourseNumber;
@@ -65,24 +68,6 @@ public class Schedule {
 	public void setFloor(int floor) {
 		this.floor = floor;
 	}
-	public int getBirthdayDay() {
-		return BirthdayDay;
-	}
-	public void setBirthdayDay(int birthdayDay) {
-		BirthdayDay = birthdayDay;
-	}
-	public int getBirthdayMonth() {
-		return BirthdayMonth;
-	}
-	public void setBirthdayMonth(int birthdayMonth) {
-		BirthdayMonth = birthdayMonth;
-	}
-	public int getBirthdayYear() {
-		return BirthdayYear;
-	}
-	public void setBirthdayYear(int birthdayYear) {
-		BirthdayYear = birthdayYear;
-	}
 	public int getAdressStreetNumber() {
 		return AdressStreetNumber;
 	}
@@ -125,11 +110,17 @@ public class Schedule {
 	public void setSemester(String semester) {
 		Semester = semester;
 	}
-	
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
 	@Override
 	public String toString() {
 		return "***Course information CourseNumber=" + CourseNumber +", Name=" + Name+ ", Semester=" + Semester +", HoursAmount=" + HoursAmount + ", Year=" + Year + ", Day="+ Day + ", Time=" + Time_Hour + ":" + Time_Minute + ", "
-				+"***Lecture information*** Lecture_ID=" + Lecture_ID + ", Name=" + firstName+" " + lastName +", Birthday=" + BirthdayDay + "." + BirthdayMonth + "." + BirthdayYear +", Adress=" +AdressStreetName +" "+AdressStreetNumber+ ","+ AdressCity
+				+"***Lecture information*** Lecture_ID=" + Lecture_ID + ", Name=" + firstName+" " + lastName +", Birthday=" + birthday +", Adress=" +AdressStreetName +" "+AdressStreetNumber+ ","+ AdressCity
 				+"***Class information*** classNumber=" + classNumber + ", BuildingNumber=" + BuildingNumber + ", floor=" + floor;		
 	}
+
 }
