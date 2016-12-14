@@ -391,4 +391,31 @@ public class Connection2DB {
 	}
 
 	
+	//need to complete the object below
+	public ArrayList<lectureCourseClass> getClassCourseList() throws SQLException 	
+	{
+		connection=DriverManager.getConnection(protocol,USER,PASS);
+		connection.setAutoCommit(false);
+	    statement = connection.createStatement();
+	    String sql= "SELECT teaching.Lecture_ID, course.*,takeplace.Class_ClassNumber FROM course JOIN teaching ON course.CourseNumber=teaching.Course_CourseNumber JOIN takeplace ON course.CourseNumber=takeplace.Course_CourseNumber;";
+	    ResultSet rs = statement.executeQuery(sql);
+	    ArrayList<lectureCourseClass> lectureCourseClasslist = new ArrayList<lectureCourseClass>();
+	    while(rs.next())
+	    {   	
+	    	lectureCourseClass lectureCourseClassobject = new lectureCourseClass();
+	    	lectureCourseClassobject.setID(rs.getInt("Lecture_ID"));
+	    	lectureCourseClassobject.setCourseNumber(rs.getInt("CourseNumber"));
+	    	lectureCourseClassobject.setCourseName(rs.getString("Name"));
+	    	lectureCourseClassobject.setClassNumber(rs.getInt("Class_ClassNumber"));
+	    	lectureCourseClassobject.setDay(rs.getInt("Day"));
+	    	lectureCourseClassobject.setHourseAmount(rs.getInt("HourseAmount"));
+	    	lectureCourseClassobject.setTimeHour(rs.getInt("Time_Hour"));
+	    	lectureCourseClassobject.setTimeMinute(rs.getInt("Time_Minute"));
+	    	lectureCourseClassobject.setYear(rs.getInt("Year"));
+	    	lectureCourseClasslist.add(lectureCourseClassobject);
+	    }
+	    connection.close();
+	    return lectureCourseClasslist; 
+	}
+	
 }

@@ -47,6 +47,7 @@ public class ProgramGUI {
 		private ArrayList<Lecture> lec;
 		private ArrayList<Course> crs;
 		private Button ClassInformaiton;
+		private Button LectureClassCourseList;
 		
 		public static void main(String[] args) throws SQLException
 		{
@@ -302,6 +303,12 @@ public class ProgramGUI {
 
 			ClassInformaiton.setBounds(510, 942, 182, 25);
 			ClassInformaiton.setText("Class Informaiton");
+			
+			LectureClassCourseList = new Button(shell, SWT.NONE);
+			LectureClassCourseList.setText("Lecture Class&Course List");
+			LectureClassCourseList.setBounds(725, 942, 182, 25);
+
+
 
 		}
 
@@ -615,7 +622,6 @@ public class ProgramGUI {
 				}
 			});
 
-
 			FindLectures.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e)
@@ -629,6 +635,14 @@ public class ProgramGUI {
 				public void widgetSelected(SelectionEvent e) 
 				{
 					ClassInformation qyeryAnswer = new ClassInformation();
+					qyeryAnswer.open();
+				}
+			});
+			LectureClassCourseList.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) 
+				{
+					lectureCourseClassFrame qyeryAnswer = new lectureCourseClassFrame();
 					qyeryAnswer.open();
 				}
 			});
