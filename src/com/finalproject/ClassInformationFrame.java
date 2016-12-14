@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-public class ClassInformation{
+public class ClassInformationFrame{
 
 	protected Shell shell;
 	private List list;
@@ -28,9 +28,10 @@ public class ClassInformation{
 
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(1800, 499);		
+		shell.setSize(620, 499);	
+		shell.setText("Class infomation Lecture Courses");
 		list = new List(shell, SWT.BORDER);
-		list.setBounds(10, 10, 1780, 440);
+		list.setBounds(10, 10, 580, 440);
 		
 		try {
 				sch = Connection2DB.Instance().getClassInformation();

@@ -340,7 +340,6 @@ public class Connection2DB {
 	    ArrayList<Schedule> sch = new ArrayList<Schedule>();
 	    while(rs.next())
 	    {   	
-
 	    	Schedule schedule = new Schedule();
 			//course information 
 	    	schedule.setCourseNumber(rs.getInt("CourseNumber"));

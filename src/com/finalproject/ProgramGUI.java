@@ -581,8 +581,8 @@ public class ProgramGUI {
 				}
 			});
 
-
-			//************PairClassLecture*******************************************//
+/******************************Paring section*****************************/
+			//Pair Class Lecture
 			PairCourseLecture.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
@@ -597,7 +597,7 @@ public class ProgramGUI {
 					}
 				}
 			});
-			//************PairClassCourse*******************************************//
+			//Pair Class Course
 			PairClassCourse.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
@@ -612,13 +612,14 @@ public class ProgramGUI {
 					}
 				}
 			});
+/***********************************************************************************/
 
 			ShowFullSchedule.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					ShowFullSchedule abc = new ShowFullSchedule();
-					abc.open();
+					ShowFullScheduleFrame qyeryAnswer = new ShowFullScheduleFrame();
+					qyeryAnswer.open();
 				}
 			});
 
@@ -626,7 +627,7 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e)
 				{
-					ShowQueryAnswer qyeryAnswer = new ShowQueryAnswer();
+					ShowLecturesFrame qyeryAnswer = new ShowLecturesFrame();
 					qyeryAnswer.open();
 				}
 			});
@@ -634,7 +635,7 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					ClassInformation qyeryAnswer = new ClassInformation();
+					ClassInformationFrame qyeryAnswer = new ClassInformationFrame();
 					qyeryAnswer.open();
 				}
 			});

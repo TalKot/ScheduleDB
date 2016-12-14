@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 
-public class ShowFullSchedule {
+public class ShowFullScheduleFrame {
 
 	protected Shell shell;
 	private List list;

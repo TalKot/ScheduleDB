@@ -34,11 +34,11 @@ public class lectureCourseClassFrame {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(1800, 499);
-		shell.setText("Show Full Schedule");
+		shell.setSize(720, 499);
+		shell.setText("Lecture Course Class List");
 		
 		list = new List(shell, SWT.BORDER);
-		list.setBounds(10, 10, 1780, 440);
+		list.setBounds(10, 10, 680, 440);
 		
 		
 		

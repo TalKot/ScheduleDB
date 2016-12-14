@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-public class ShowQueryAnswer {
+public class ShowLecturesFrame {
 
 	protected Shell shell;
 	private Text StartGroupDayText;
