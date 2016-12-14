@@ -1,6 +1,6 @@
 package com.finalproject;
 
-public class lectureCourseClass {
+public class lectureCourseClassQuery {
 	private int ID,CourseNumber,HourseAmount,Year,Day,TimeHour,TimeMinute,ClassNumber;
 	private String CourseName;
 

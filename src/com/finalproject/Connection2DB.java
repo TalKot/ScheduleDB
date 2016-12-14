@@ -330,17 +330,17 @@ public class Connection2DB {
 	}
 	
 	/*Answer to query about full schedule*/
-	public ArrayList<Schedule> getSchedule() throws SQLException 	
+	public ArrayList<FullScheduleQuery> getSchedule() throws SQLException 	
 	{
 		connection=DriverManager.getConnection(protocol,USER,PASS);
 		connection.setAutoCommit(false);
 	    statement = connection.createStatement();
 	    String sql = "SELECT * FROM course left JOIN takeplace ON CourseNumber=takeplace.Course_CourseNumber left JOIN class ON ClassNumber=takeplace.Class_ClassNumber left JOIN teaching ON CourseNumber=teaching.Course_CourseNumber left JOIN lecture ON ID=teaching.Lecture_ID ORDER BY course.CourseNumber;";
 	    ResultSet rs = statement.executeQuery(sql);
-	    ArrayList<Schedule> sch = new ArrayList<Schedule>();
+	    ArrayList<FullScheduleQuery> sch = new ArrayList<FullScheduleQuery>();
 	    while(rs.next())
 	    {   	
-	    	Schedule schedule = new Schedule();
+	    	FullScheduleQuery schedule = new FullScheduleQuery();
 			//course information 
 	    	schedule.setCourseNumber(rs.getInt("CourseNumber"));
 	    	schedule.setName(rs.getString("Name"));
@@ -391,17 +391,17 @@ public class Connection2DB {
 
 	
 	//need to complete the object below
-	public ArrayList<lectureCourseClass> getClassCourseList() throws SQLException 	
+	public ArrayList<lectureCourseClassQuery> getClassCourseList() throws SQLException 	
 	{
 		connection=DriverManager.getConnection(protocol,USER,PASS);
 		connection.setAutoCommit(false);
 	    statement = connection.createStatement();
 	    String sql= "SELECT teaching.Lecture_ID, course.*,takeplace.Class_ClassNumber FROM course JOIN teaching ON course.CourseNumber=teaching.Course_CourseNumber JOIN takeplace ON course.CourseNumber=takeplace.Course_CourseNumber;";
 	    ResultSet rs = statement.executeQuery(sql);
-	    ArrayList<lectureCourseClass> lectureCourseClasslist = new ArrayList<lectureCourseClass>();
+	    ArrayList<lectureCourseClassQuery> lectureCourseClasslist = new ArrayList<lectureCourseClassQuery>();
 	    while(rs.next())
 	    {   	
-	    	lectureCourseClass lectureCourseClassobject = new lectureCourseClass();
+	    	lectureCourseClassQuery lectureCourseClassobject = new lectureCourseClassQuery();
 	    	lectureCourseClassobject.setID(rs.getInt("Lecture_ID"));
 	    	lectureCourseClassobject.setCourseNumber(rs.getInt("CourseNumber"));
 	    	lectureCourseClassobject.setCourseName(rs.getString("Name"));

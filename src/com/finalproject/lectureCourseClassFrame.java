@@ -11,7 +11,7 @@ public class lectureCourseClassFrame {
 
 	protected Shell shell;
 	private List list;
-	private ArrayList<lectureCourseClass> sch;
+	private ArrayList<lectureCourseClassQuery> sch;
 
 	/**
 	 * Open the window.
@@ -44,7 +44,7 @@ public class lectureCourseClassFrame {
 		
 		try {
 				sch = Connection2DB.Instance().getClassCourseList();
-				for (lectureCourseClass lectureCourseClass : sch) 
+				for (lectureCourseClassQuery lectureCourseClass : sch) 
 				{
 					list.add(lectureCourseClass.toString());
 				}

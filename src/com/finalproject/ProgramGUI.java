@@ -300,36 +300,27 @@ public class ProgramGUI {
 			ShowFullSchedule.setBounds(75, 942, 182, 25);
 			ShowFullSchedule.setText("Show Full Schedule");	
 			ClassInformaiton = new Button(shell, SWT.NONE);
-
 			ClassInformaiton.setBounds(510, 942, 182, 25);
-			ClassInformaiton.setText("Class Informaiton");
-			
+			ClassInformaiton.setText("Class Informaiton");		
 			LectureClassCourseList = new Button(shell, SWT.NONE);
 			LectureClassCourseList.setText("Lecture Class&Course List");
 			LectureClassCourseList.setBounds(725, 942, 182, 25);
-
-
-
 		}
 
 		protected void createContents() 
 		{
-
-			try 
+			try //first enter of the list to the GUI first lists
 			{
-				listClass.removeAll();
 				cls = Connection2DB.Instance().getClasses("");
 				for (Classes classes : cls) 
 				{
 					listClass.add(classes.toString());
 				}
-				listLecture.removeAll();
 				lec = Connection2DB.Instance().getLecture("");
 				for (Lecture lecture : lec) 
 				{
 					listLecture.add(lecture.toString());
 				}
-				listCourse.removeAll();
 				crs= Connection2DB.Instance().getCourse("");
 				for (Course course : crs) 
 				{
@@ -618,7 +609,7 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					ShowFullScheduleFrame qyeryAnswer = new ShowFullScheduleFrame();
+					FullScheduleFrame qyeryAnswer = new FullScheduleFrame();
 					qyeryAnswer.open();
 				}
 			});
@@ -627,7 +618,7 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e)
 				{
-					ShowLecturesFrame qyeryAnswer = new ShowLecturesFrame();
+					LecturesFrame qyeryAnswer = new LecturesFrame();
 					qyeryAnswer.open();
 				}
 			});

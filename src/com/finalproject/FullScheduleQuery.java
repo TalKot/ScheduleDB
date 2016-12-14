@@ -2,7 +2,7 @@ package com.finalproject;
 
 import java.sql.Date;
 
-public class Schedule {
+public class FullScheduleQuery {
 	private int CourseNumber, HoursAmount,Year,Day,Time_Hour,Time_Minute,Lecture_ID,classNumber;
 	private int BuildingNumber, floor,AdressStreetNumber;
 	private String firstName, lastName, AdressStreetName,AdressCity, Name, Semester;

@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 
-public class ShowFullScheduleFrame {
+public class FullScheduleFrame {
 
 	protected Shell shell;
 	private List list;
-	private ArrayList<Schedule> sch;
+	private ArrayList<FullScheduleQuery> sch;
 
 	/**
 	 * Open the window.
@@ -31,28 +31,25 @@ public class ShowFullScheduleFrame {
 
 	/**
 	 * Create contents of the window.
-	 * @wbp.parser.entryPoint
 	 */
 	protected void createContents() {
 		shell = new Shell();
 		shell.setSize(1800, 499);
 		shell.setText("Show Full Schedule");
-		
 		list = new List(shell, SWT.BORDER);
 		list.setBounds(10, 10, 1780, 440);
-		
-		
-		
-		try {
-				sch = Connection2DB.Instance().getSchedule();
-				for (Schedule schedule : sch) 
-				{
-					list.add(schedule.toString());
-				}
+
+		try{
+			list.removeAll();
+			sch = Connection2DB.Instance().getSchedule();
+			for (FullScheduleQuery schedule : sch) 
+			{
+				list.add(schedule.toString());
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 			
 	}
 
