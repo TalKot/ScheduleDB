@@ -349,8 +349,8 @@ public class ProgramGUI {
 						{
 							String query1 = "DELETE FROM class WHERE ClassNumber="+ClassGroupClassNumberText.getText() ;
 							String query2 = "DELETE FROM takeplace WHERE Class_ClassNumber="+ClassGroupClassNumberText.getText() ;
-							Connection2DB.Instance().Exectueuery(query1);
-							Connection2DB.Instance().Exectueuery(query2);					
+							Connection2DB.Instance().Exectuequery(query1);
+							Connection2DB.Instance().Exectuequery(query2);	
 						}
 						else if (ClassGroupChooseInsert.getSelection())//Class Insert option
 						{
@@ -364,7 +364,7 @@ public class ProgramGUI {
 						else if(ClassGroupChooseUpdate.getSelection())//Class Update option
 						{
 							String query = "UPDATE class SET BuildingNumber="+ClassGroupBuildingNumberText.getText()+",Floor="+ClassGroupFloorText.getText()+" WHERE ClassNumber="+ClassGroupClassNumberText.getText()+";";
-							Connection2DB.Instance().Exectueuery(query);
+							Connection2DB.Instance().Exectuequery(query);
 						}
 						else
 						{
@@ -380,7 +380,6 @@ public class ProgramGUI {
 						}
 						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
 						ClassGroupResultText.setText("Action Complete.");
-						
 					}
 					catch (SQLException e1) 
 					{
@@ -408,23 +407,20 @@ public class ProgramGUI {
 							CourseGroupResultText.setText("All Information Must Be Added.");
 							return;
 					}
-					/*splitting the options*/
 					try
 					{
 						if (CourseGroupChooseDelete.getSelection())//Course delete option
 						{
 							String query1 = "DELETE FROM Course WHERE CourseNumber="+CourseGroupCourseNumberText.getText()+";" ;
-							//String query2 = "DELETE FROM takeplace WHERE Course_CourseNumber="+CourseGroupCourseNumberText.getText() ;
-							System.out.println("Delete query 1 - "+query1);
-							//System.out.println("Delete query 2 - "+query2);
-							//String query3 = "DELETE FROM teaching WHERE Course_CourseNumber="+CourseGroupCourseNumberText.getText() ;
-							Connection2DB.Instance().Exectueuery(query1);
-							//Connection2DB.Instance().Exectueuery(query2);
-							//Connection2DB.Instance().Exectueuery(query3);
+							String query2 = "DELETE FROM takeplace WHERE Course_CourseNumber="+CourseGroupCourseNumberText.getText() ;
+							String query3 = "DELETE FROM teaching WHERE Course_CourseNumber="+CourseGroupCourseNumberText.getText() ;
+							Connection2DB.Instance().Exectuequery(query1);
+							Connection2DB.Instance().Exectuequery(query2);
+							Connection2DB.Instance().Exectuequery(query3);
+
 						}	
 						else if (CourseGroupChooseInsert.getSelection())//Course Insert option
 						{
-							/*Prepared Statement to insert new Course*/
 							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO Course(CourseNumber,Name, Semester ,HourseAmount ,Year ,Day ,Time_Hour,Time_Minute) VALUES (?,?,?,?,?,?,?,?);");				
 							pStmt.setInt(1,Integer.parseInt(CourseGroupCourseNumberText.getText()));
 							pStmt.setString(2,CourseGroupCourseNameText.getText());
@@ -436,18 +432,11 @@ public class ProgramGUI {
 							pStmt.setInt(8,Integer.parseInt(CourseGroupTimeMinuteText.getText()));
 							pStmt.executeUpdate();
 							pStmt.close();
-	
 						}
 						else if(CourseGroupChooseUpdate.getSelection())//Course Update option
 						{
-							 String query = "UPDATE course SET Name='"+CourseGroupCourseNameText.getText()+"',"+"Semester='"+ CourseGroupCourseSemesterText.getText()+"',"+
-							 "HourseAmount="+ CourseGroupHoursAmountText.getText()+","+
-							 "Year="+CourseGroupYearText.getText() +","+
-							 "Day="+ CourseGroupDayText.getText()+","+
-							 "Time_Hour="+ CourseGroupTimeHourText.getText()+","+
-							 "Time_Minute="+CourseGroupTimeMinuteText.getText()+
-							 " WHERE CourseNumber="+CourseGroupCourseNumberText.getText()+";";						
-							Connection2DB.Instance().Exectueuery(query);
+							String query = "UPDATE course SET Name='"+CourseGroupCourseNameText.getText()+"',"+"Semester='"+ CourseGroupCourseSemesterText.getText()+"',"+"HourseAmount="+ CourseGroupHoursAmountText.getText()+","+"Year="+CourseGroupYearText.getText() +","+"Day="+ CourseGroupDayText.getText()+","+ "Time_Hour="+ CourseGroupTimeHourText.getText()+","+"Time_Minute="+CourseGroupTimeMinuteText.getText()+" WHERE CourseNumber="+CourseGroupCourseNumberText.getText()+";";						
+							Connection2DB.Instance().Exectuequery(query);
 						}
 						else /*when no operation chosen*/
 						{
@@ -493,30 +482,18 @@ public class ProgramGUI {
 					{	
 						if (LectureGroupChooseDelete.getSelection())//Lecture delete option
 						{
-							try{
 							String query1 = "DELETE FROM lecture WHERE ID="+LectureGroupIDText.getText() ;
-							//String query2 = "DELETE FROM teaching WHERE Lecture_ID="+LectureGroupIDText.getText() ;
-							Connection2DB.Instance().Exectueuery(query1);
-							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("DELETE from LECTUREPHONE WHERE LectureID=?;");	
-							pStmt.setInt(1,Integer.parseInt(LectureGroupIDText.getText()));
-							pStmt.executeUpdate();
-							pStmt.close();
-							//Connection2DB.Instance().Exectueuery(query2);
-							//Connection2DB.Instance().Exectueuery(query3);
-							}
-							catch(Exception e1)
-							{
-								e1.printStackTrace();
-							}
+							String query2 = "DELETE FROM teaching WHERE Lecture_ID="+LectureGroupIDText.getText() ;
+							Connection2DB.Instance().Exectuequery(query1);
+							Connection2DB.Instance().Exectuequery(query2);
+							//lecturephone will update because of the CASCADE
 						}
 						else if (LectureGroupChooseInsert.getSelection())//Lecture Insert option
 						{
-							/*Prepared Statement to insert new Lecture*/
 							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO Lecture(ID ,Name_FirstName,Name_LastName,Birthday, Address_City,Address_street_Number,Address_Name)VALUES (?,?,?,?,?,?,?);");				
 							pStmt.setInt(1,Integer.parseInt(LectureGroupIDText.getText()));
 							pStmt.setString(2,LectureGroupFirstNameText.getText());
 							pStmt.setString(3,LectureGroupLastNameText.getText());
-							/////
 							SimpleDateFormat format = new SimpleDateFormat( "MM/dd/yyyy" );  
 							java.util.Date myDate;
 							myDate = format.parse( LectureGroupBirthdayMonthText.getText()+"/"+LectureGroupBirthdayDayText.getText()+"/"+LectureGroupBirthdayYearText.getText());
@@ -580,7 +557,7 @@ public class ProgramGUI {
 				{
 					String query = "INSERT INTO teaching VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+lec.get(listLecture.getSelectionIndex()).getID()+");";
 					try {
-						Connection2DB.Instance().Exectueuery(query);
+						Connection2DB.Instance().Exectuequery(query);
 					} 
 					catch (SQLException e1) {
 						e1.printStackTrace();
@@ -595,7 +572,7 @@ public class ProgramGUI {
 				{
 					String query = "INSERT INTO takeplace VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+cls.get(listClass.getSelectionIndex()).getClassNumber()+")";
 					try {
-						Connection2DB.Instance().Exectueuery(query);
+						Connection2DB.Instance().Exectuequery(query);
 					} 
 					catch (SQLException e1) {
 						e1.printStackTrace();
