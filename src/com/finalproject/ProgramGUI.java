@@ -412,12 +412,10 @@ public class ProgramGUI {
 						if (CourseGroupChooseDelete.getSelection())//Course delete option
 						{
 							String query1 = "DELETE FROM Course WHERE CourseNumber="+CourseGroupCourseNumberText.getText()+";" ;
-							String query2 = "DELETE FROM takeplace WHERE Course_CourseNumber="+CourseGroupCourseNumberText.getText() ;
 							String query3 = "DELETE FROM teaching WHERE Course_CourseNumber="+CourseGroupCourseNumberText.getText() ;
+							//takeplace will delete tupple by using trigger
 							Connection2DB.Instance().Exectuequery(query1);
-							Connection2DB.Instance().Exectuequery(query2);
 							Connection2DB.Instance().Exectuequery(query3);
-
 						}	
 						else if (CourseGroupChooseInsert.getSelection())//Course Insert option
 						{

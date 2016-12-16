@@ -1,6 +1,6 @@
 package com.finalproject;
 
-public class LecturesQuery {
+public class LecturesQuery extends Lecture{
 	//need to complete the code here
 
 }

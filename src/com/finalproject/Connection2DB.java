@@ -16,7 +16,7 @@ import com.mysql.jdbc.PreparedStatement;
 public class Connection2DB { 
 	
 	private final String driver = "com.mysql.jdbc.Driver";  	
-	private final String protocol = "jdbc:mysql://localhost:3306/aa"; 	
+	private final String protocol = "jdbc:mysql://localhost:3306/abcd"; 	
 	private final String USER = "root"; 	
 	private final String PASS = "admin"; 
 	private Connection connection = null; 
@@ -47,7 +47,7 @@ public class Connection2DB {
 			} 
 			catch(Exception e)
 			{
-				//e.printStackTrace(); 
+				e.printStackTrace(); 
 				connection.rollback();
 			}
 			finally 	
@@ -66,9 +66,7 @@ public class Connection2DB {
 		statement.execute("create table IF NOT EXISTS Lecture(ID int,Name_FirstName varchar(255),Name_LastName varchar(255),Birthday DATE, Address_City varchar(255),Address_street_Number int,Address_Name varchar(255),PRIMARY KEY (ID))"); 		
 		statement.execute("create table IF NOT EXISTS Takeplace(Course_CourseNumber int, Class_ClassNumber int,PRIMARY KEY (Course_CourseNumber,Class_ClassNumber))");
 		statement.execute("create table IF NOT EXISTS Teaching(Course_CourseNumber int, Lecture_ID int,PRIMARY KEY (Course_CourseNumber,Lecture_ID));"); 
-		//statement.execute("create table IF NOT EXISTS Takeplace(CourseNumber int, ClassNumber int,PRIMARY KEY (CourseNumber,ClassNumber),FOREIGN KEY(CourseNumber) references Course(CourseNumber),FOREIGN KEY(ClassNumber) references Class(ClassNumber) ON DELETE CASCADE ON UPDATE CASCADE)");
-		//statement.execute("create table IF NOT EXISTS Teaching(CourseNumber int,ID int, PRIMARY KEY (ID,CourseNumber),FOREIGN KEY(ID) references Lecture(ID),FOREIGN KEY(CourseNumber) references Course(CourseNumber) ON DELETE CASCADE ON UPDATE CASCADE)"); 
-		statement.execute("create table IF NOT EXISTS LecturePhone(ID int,PhoneNumber int,PRIMARY KEY (PhoneNumber),FOREIGN KEY(ID) references Lecture(ID) ON DELETE CASCADE ON UPDATE CASCADE)"); 
+		statement.execute("create table IF NOT EXISTS LecturePhone(ID int,PhoneNumber int ,PRIMARY KEY (PhoneNumber),FOREIGN KEY(ID) references Lecture(ID) ON DELETE CASCADE ON UPDATE CASCADE)"); 
 	}
 	
 	public void enterData() throws SQLException, ParseException
@@ -87,7 +85,7 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO class VALUES (304,2,3)");
 		connection.commit();
 		/*INSERT into Course table*/
-		statement.executeUpdate("INSERT INTO course VALUES(5000,'courseA','A',5,2,1,18,00)"); 		
+		statement.executeUpdate("INSERT INTO course VALUES(5000,'courseA','A',5,2,1,18,00)");
 		statement.executeUpdate("INSERT INTO course VALUES(5001,'courseB','A',2,3,1,12,00)"); 		
 		statement.executeUpdate("INSERT INTO course VALUES(5002,'courseB','A',3,1,1,18,30)"); 		
 		statement.executeUpdate("INSERT INTO course VALUES(5003,'courseC','B',4,1,2,10,30)"); 		
@@ -222,7 +220,7 @@ public class Connection2DB {
 		statement.executeUpdate("INSERT INTO Takeplace VALUES(5010,200)"); 
 		connection.commit();
 		/*INSERT into LecturePhone table*/
-		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444440,305468050)"); 
+		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444440,305468050)");
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444440,0526336132)");
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444441,0543334557)");
 		statement.executeUpdate("INSERT INTO LecturePhone VALUES(305444441,675849387)");
@@ -429,5 +427,4 @@ public class Connection2DB {
 	    connection.close();
 	    return lectureCourseClasslist; 
 	}
-	
 }

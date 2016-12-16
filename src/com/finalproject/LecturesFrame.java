@@ -103,7 +103,8 @@ public class LecturesFrame {
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
-				String sqlQuery = "SELECT teaching.Lecture_ID, course.* FROM teaching RIGHT JOIN course ON teaching.Course_CourseNumber=course.CourseNumber	WHERE (course.Day >"+StartGroupDayText.getText()+" AND course.Time_Hour>="+StartGroupHourText.getText()+") AND (course.Day<"+EndGroupDayText.getText()+" AND course.Time_Hour<"+EndGroupHourText.getText()+") ORDER BY teaching.Lecture_ID;";				System.out.println(sqlQuery);
+				/*nesting of subqueries*/
+				String sqlQuery = "select * from course right JOIN teaching ON teaching.Course_CourseNumber=CourseNumber right JOIN lecture ON lecture.ID=Lecture_ID where Day>="+StartGroupDayText.getText()+" and Day<="+EndGroupDayText.getText()+" and CourseNumber in (select CourseNumber from course where Time_Hour>="+StartGroupHourText.getText()+" and Time_Hour<="+EndGroupHourText.getText()+");";
 				System.out.println(sqlQuery);
 				try {
 					list.removeAll();
