@@ -47,7 +47,7 @@ public class Connection2DB {
 			} 
 			catch(Exception e)
 			{
-				e.printStackTrace(); 
+				//e.printStackTrace(); 
 				connection.rollback();
 			}
 			finally 	

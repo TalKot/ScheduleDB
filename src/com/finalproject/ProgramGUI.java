@@ -48,15 +48,23 @@ public class ProgramGUI {
 		private ArrayList<Course> crs;
 		private Button ClassInformaiton;
 		private Button LectureClassCourseList;
+		private static Text PairResultText;
 		
 		public static void main(String[] args) throws SQLException
 		{
 			try{
 				new ProgramGUI().open();
+				/*
+				while(true)
+				{
+					if()
+				}
+				*/
 			}
 			catch (Exception e) {
-				e.printStackTrace();
-			}
+					PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+					PairResultText.setText(e.getMessage());
+				}
 		}
 
 
@@ -81,7 +89,6 @@ public class ProgramGUI {
 			shell.setSize(1040, 1015);
 			shell.setLocation(200, 0);
 			shell.setText("DB Final Project");
-			
 			LectureGroupView = new Group(shell, SWT.NONE);
 			LectureGroupView.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 			LectureGroupView.setText("Lecturer");
@@ -291,12 +298,12 @@ public class ProgramGUI {
 			PairCourseLecture = new Button(shell, SWT.NONE);
 			PairCourseLecture.setText("Pair Course Lecture");
 			PairClassCourse.setText("Pair Class Course");
-			PairClassCourse.setBounds(553, 356, 158, 25);			
+			PairClassCourse.setBounds(220, 356, 158, 25);			
 			ShowFullSchedule = new Button(shell, SWT.NONE);
 			FindLectures = new Button(shell, SWT.NONE);
 			FindLectures.setText("Find Lectures");
 			FindLectures.setBounds(297, 942, 182, 25);
-			PairCourseLecture.setBounds(297, 356, 158, 25);
+			PairCourseLecture.setBounds(44, 356, 158, 25);
 			ShowFullSchedule.setBounds(75, 942, 182, 25);
 			ShowFullSchedule.setText("Show Full Schedule");	
 			ClassInformaiton = new Button(shell, SWT.NONE);
@@ -305,6 +312,11 @@ public class ProgramGUI {
 			LectureClassCourseList = new Button(shell, SWT.NONE);
 			LectureClassCourseList.setText("Lecture Class&Course List");
 			LectureClassCourseList.setBounds(725, 942, 182, 25);
+			PairResultText = new Text(shell, SWT.BORDER);
+			PairResultText.setEnabled(false);
+			PairResultText.setEditable(false);
+			PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+			PairResultText.setBounds(395, 355, 586, 26);
 		}
 
 		protected void createContents() 
@@ -327,9 +339,10 @@ public class ProgramGUI {
 					listCourse.add(course.toString());
 				}
 			} 
-			catch (SQLException e1) 
+			catch (SQLException e) 
 			{
-				e1.printStackTrace();
+				PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+				PairResultText.setText(e.getMessage());
 			}
 /***********************************Execute Button of Class group******************************************/
 			ClassGroupExecuteButton.addSelectionListener(new SelectionAdapter() {
@@ -337,10 +350,10 @@ public class ProgramGUI {
 				public void widgetSelected(SelectionEvent e) 
 				{
 					/*checking all information added*/
-					if (ClassGroupBuildingNumberText.getText().equals("") || ClassGroupClassNumberText.getText().equals("") ||ClassGroupFloorText.getText().equals(""))
+					if (ClassGroupClassNumberText.getText().equals(""))
 					{
 						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-						ClassGroupResultText.setText("All Information Must Be Added.");
+						ClassGroupResultText.setText("Class Number text filed must be added - Primary key!");
 						return;
 					}
 					try
@@ -400,11 +413,10 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					if (CourseGroupCourseNumberText.getText().equals("")||CourseGroupCourseNameText.getText().equals("")||CourseGroupCourseSemesterText.getText().equals("")||CourseGroupHoursAmountText.getText().equals("")||CourseGroupDayText.getText().equals("")|| 
-					CourseGroupYearText.getText().equals("")||CourseGroupTimeHourText.getText().equals("")||CourseGroupTimeMinuteText.getText().equals(""))
+					if (CourseGroupCourseNumberText.getText().equals(""))
 					{
 							CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-							CourseGroupResultText.setText("All Information Must Be Added.");
+							CourseGroupResultText.setText("Course Number text filed must be added - Primary key!");
 							return;
 					}
 					try
@@ -470,10 +482,10 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					if (LectureGroupIDText.getText().equals("")||LectureGroupFirstNameText.getText().equals("")||LectureGroupLastNameText.getText().equals("")||LectureGroupBirthdayDayText.getText().equals("")||LectureGroupBirthdayMonthText.getText().equals("")|| LectureGroupBirthdayYearText.getText().equals("")||LectureGroupAdressCityText.getText().equals("")||LectureGroupAdressNameText.getText().equals("")||LectureGroupAdressNumberText.getText().equals(""))
+					if (LectureGroupIDText.getText().equals(""))
 					{
 						LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-						LectureGroupResultText.setText("All Information Must Be Added.");
+						LectureGroupResultText.setText("Lecture ID text filed must be added - Primary key!");
 						return;
 					}
 					try
@@ -553,12 +565,20 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					String query = "INSERT INTO teaching VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+lec.get(listLecture.getSelectionIndex()).getID()+");";
 					try {
+						String query = "INSERT INTO teaching VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+lec.get(listLecture.getSelectionIndex()).getID()+");";
 						Connection2DB.Instance().Exectuequery(query);
+						PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
+						PairResultText.setText("Action Complete.");
 					} 
 					catch (SQLException e1) {
-						e1.printStackTrace();
+						PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						PairResultText.setText(e1.getMessage());
+						return;
+					}
+					catch (Exception e1) {
+						PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						PairResultText.setText(e1.getMessage());
 						return;
 					}
 				}
@@ -568,17 +588,75 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					String query = "INSERT INTO takeplace VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+cls.get(listClass.getSelectionIndex()).getClassNumber()+")";
 					try {
+						String query = "INSERT INTO takeplace VALUES ("+crs.get(listCourse.getSelectionIndex()).getCourseNumber()+","+cls.get(listClass.getSelectionIndex()).getClassNumber()+")";
 						Connection2DB.Instance().Exectuequery(query);
+						PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
+						PairResultText.setText("Action Complete.");
 					} 
 					catch (SQLException e1) {
-						e1.printStackTrace();
+						PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						PairResultText.setText(e1.getMessage());
 						return;
 					}
+					catch (Exception e1) {
+						PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						PairResultText.setText(e1.getMessage());
+						return;
+					}
+					
 				}
 			});
+/************************Add information to text fields after click****************************************/
+			
+			listLecture.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) 
+				{
+					Lecture ClickedLecture  = lec.get(listLecture.getSelectionIndex());
+					String birthday = ClickedLecture.getBirthday().toString();
+					String[] dates=birthday.split("-");
+					LectureGroupIDText.setText(String.valueOf(ClickedLecture.getID()));
+					LectureGroupFirstNameText.setText(ClickedLecture.getFirstName());
+					LectureGroupLastNameText.setText(ClickedLecture.getLastName());
+					LectureGroupAdressCityText.setText(ClickedLecture.getAdressCity());
+					LectureGroupAdressNameText.setText(ClickedLecture.getAdressName());
+					LectureGroupBirthdayDayText.setText(dates[2]);
+					LectureGroupBirthdayMonthText.setText(dates[1]);
+					LectureGroupBirthdayYearText.setText(dates[0]);
+					LectureGroupAdressNumberText.setText(String.valueOf(ClickedLecture.getAdressStreetNumber()));											
+				}	
+			});
+			
+			listClass.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) 
+				{
+					Classes ClickedClass = cls.get(listClass.getSelectionIndex());
+					ClassGroupBuildingNumberText.setText(String.valueOf(ClickedClass.getBuildingNumber()));
+					ClassGroupClassNumberText.setText(String.valueOf(ClickedClass.getClassNumber()));
+					ClassGroupFloorText.setText(String.valueOf(ClickedClass.getFloor()));
+				}	
+			});
+			
+			listCourse.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) 
+				{
+					Course ClickedCourse = crs.get(listCourse.getSelectionIndex());
+					CourseGroupCourseNumberText.setText(String.valueOf(ClickedCourse.getCourseNumber()));
+					CourseGroupCourseNameText.setText(ClickedCourse.getName());
+					CourseGroupCourseSemesterText.setText(ClickedCourse.getSemester());
+					CourseGroupHoursAmountText.setText(String.valueOf(ClickedCourse.getHourseAmount()));
+					CourseGroupDayText.setText(String.valueOf(ClickedCourse.getDay()));
+					CourseGroupYearText.setText(String.valueOf(ClickedCourse.getYear()));
+					CourseGroupTimeMinuteText.setText(String.valueOf(ClickedCourse.getTime_Minute()));
+					CourseGroupTimeHourText.setText(String.valueOf(ClickedCourse.getTime_Hour()));
+				}	
+			});
 /***********************************************************************************/
+			
+
 
 			ShowFullSchedule.addSelectionListener(new SelectionAdapter() {
 				@Override
