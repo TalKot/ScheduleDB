@@ -26,6 +26,7 @@ public class ClassInformationFrame{
 	}
 
 
+
 	protected void createContents() {
 		shell = new Shell();
 		shell.setSize(620, 499);	

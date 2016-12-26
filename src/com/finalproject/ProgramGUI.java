@@ -1,7 +1,6 @@
 package com.finalproject;
 
 import org.eclipse.swt.widgets.Display;
-import java.util.Properties;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -9,19 +8,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import java.awt.Image;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.widgets.List;
 import java.sql.PreparedStatement;
 
@@ -54,12 +46,6 @@ public class ProgramGUI {
 		{
 			try{
 				new ProgramGUI().open();
-				/*
-				while(true)
-				{
-					if()
-				}
-				*/
 			}
 			catch (Exception e) {
 					PairResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -350,10 +336,11 @@ public class ProgramGUI {
 				public void widgetSelected(SelectionEvent e) 
 				{
 					/*checking all information added*/
-					if (ClassGroupClassNumberText.getText().equals(""))
+					if (ClassGroupClassNumberText.getText().equals("") || ClassGroupBuildingNumberText.equals("") || ClassGroupFloorText.equals(""))
 					{
+						if (ClassGroupClassNumberText.getText().equals(""))ClassGroupResultText.setText("Class Number text filed must be added - Primary key!");
+						else ClassGroupResultText.setText("other fileds must be set as well.");
 						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-						ClassGroupResultText.setText("Class Number text filed must be added - Primary key!");
 						return;
 					}
 					try
@@ -376,8 +363,12 @@ public class ProgramGUI {
 						}
 						else if(ClassGroupChooseUpdate.getSelection())//Class Update option
 						{
-							String query = "UPDATE class SET BuildingNumber="+ClassGroupBuildingNumberText.getText()+",Floor="+ClassGroupFloorText.getText()+" WHERE ClassNumber="+ClassGroupClassNumberText.getText()+";";
-							Connection2DB.Instance().Exectuequery(query);
+							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("UPDATE class SET BuildingNumber=?,Floor=? WHERE ClassNumber = ?;");
+							pStmt.setInt(1,Integer.parseInt(ClassGroupBuildingNumberText.getText()));	
+							pStmt.setInt(2,Integer.parseInt(ClassGroupFloorText.getText()));
+							pStmt.setInt(3,Integer.parseInt(ClassGroupClassNumberText.getText()));
+							pStmt.executeUpdate();
+							pStmt.close();
 						}
 						else
 						{
@@ -413,10 +404,11 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					if (CourseGroupCourseNumberText.getText().equals(""))
+					if (CourseGroupCourseNumberText.getText().equals("")|| CourseGroupCourseNameText.getText().equals("")|| CourseGroupCourseSemesterText.getText().equals("")||CourseGroupHoursAmountText.getText().equals("") ||CourseGroupDayText.getText().equals("") || CourseGroupYearText.getText().equals("")|| CourseGroupTimeHourText.getText().equals("")||CourseGroupTimeMinuteText.getText().equals(""))
 					{
+							if (CourseGroupCourseNumberText.getText().equals(""))CourseGroupResultText.setText("Course Number text filed must be added - Primary key!");
+							else CourseGroupResultText.setText("All course text filed must be added!");
 							CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-							CourseGroupResultText.setText("Course Number text filed must be added - Primary key!");
 							return;
 					}
 					try
@@ -431,6 +423,7 @@ public class ProgramGUI {
 						}	
 						else if (CourseGroupChooseInsert.getSelection())//Course Insert option
 						{
+							try{
 							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO Course(CourseNumber,Name, Semester ,HourseAmount ,Year ,Day ,Time_Hour,Time_Minute) VALUES (?,?,?,?,?,?,?,?);");				
 							pStmt.setInt(1,Integer.parseInt(CourseGroupCourseNumberText.getText()));
 							pStmt.setString(2,CourseGroupCourseNameText.getText());
@@ -442,11 +435,27 @@ public class ProgramGUI {
 							pStmt.setInt(8,Integer.parseInt(CourseGroupTimeMinuteText.getText()));
 							pStmt.executeUpdate();
 							pStmt.close();
+							}
+							catch(NumberFormatException e1)
+							{
+								CourseGroupResultText.setText(e1.getMessage());
+								CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+								return;
+							}
 						}
 						else if(CourseGroupChooseUpdate.getSelection())//Course Update option
 						{
-							String query = "UPDATE course SET Name='"+CourseGroupCourseNameText.getText()+"',"+"Semester='"+ CourseGroupCourseSemesterText.getText()+"',"+"HourseAmount="+ CourseGroupHoursAmountText.getText()+","+"Year="+CourseGroupYearText.getText() +","+"Day="+ CourseGroupDayText.getText()+","+ "Time_Hour="+ CourseGroupTimeHourText.getText()+","+"Time_Minute="+CourseGroupTimeMinuteText.getText()+" WHERE CourseNumber="+CourseGroupCourseNumberText.getText()+";";						
-							Connection2DB.Instance().Exectuequery(query);
+							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("UPDATE course SET Name=?,Semester=?,HourseAmount=?,Year=?,Day=?,Time_Hour=?,Time_Minute=? WHERE CourseNumber=?;");				
+							pStmt.setString(1,CourseGroupCourseNameText.getText());							
+							pStmt.setString(2,CourseGroupCourseSemesterText.getText());
+							pStmt.setInt(3,Integer.parseInt(CourseGroupHoursAmountText.getText()));
+							pStmt.setInt(4,Integer.parseInt(CourseGroupYearText.getText()));
+							pStmt.setInt(5,Integer.parseInt(CourseGroupDayText.getText()));
+							pStmt.setInt(7,Integer.parseInt(CourseGroupTimeMinuteText.getText()));
+							pStmt.setInt(6,Integer.parseInt(CourseGroupTimeHourText.getText()));
+							pStmt.setInt(8,Integer.parseInt(CourseGroupCourseNumberText.getText()));
+							pStmt.executeUpdate();
+							pStmt.close();
 						}
 						else /*when no operation chosen*/
 						{
@@ -463,6 +472,11 @@ public class ProgramGUI {
 						CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
 						CourseGroupResultText.setText("Action Complete.");
 
+					}
+					catch (NumberFormatException e1) {
+						CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						CourseGroupResultText.setText(e1.getMessage());
+						return;
 					}
 					catch (SQLException e1) {
 						CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -482,10 +496,11 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					if (LectureGroupIDText.getText().equals(""))
+					if (LectureGroupIDText.getText().equals("")||LectureGroupFirstNameText.getText().equals("") ||LectureGroupLastNameText.getText().equals("") ||LectureGroupBirthdayMonthText.getText().equals("") ||LectureGroupBirthdayDayText.getText().equals("") ||LectureGroupBirthdayYearText.getText().equals("") ||LectureGroupAdressCityText.getText().equals("") ||LectureGroupAdressNumberText.getText().equals("") ||LectureGroupAdressNameText.getText().equals(""))
 					{
+						if (LectureGroupIDText.getText().equals(""))LectureGroupResultText.setText("Lecture ID text filed must be added - Primary key!");
+						else LectureGroupResultText.setText("All lecture ID text filed must be added.");
 						LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-						LectureGroupResultText.setText("Lecture ID text filed must be added - Primary key!");
 						return;
 					}
 					try
@@ -517,6 +532,7 @@ public class ProgramGUI {
 						}
 						else if(LectureGroupChooseUpdate.getSelection())//Lecture Update option
 						{
+							try{
 							SimpleDateFormat format = new SimpleDateFormat( "MM/dd/yyyy" );  
 							java.util.Date myDate = format.parse( LectureGroupBirthdayMonthText.getText()+"/"+LectureGroupBirthdayDayText.getText()+"/"+LectureGroupBirthdayYearText.getText()); 
 							String query = "UPDATE lecture SET Name_FirstName=?,Name_LastName=?,Birthday=?, Address_City=?,Address_street_Number=?,Address_Name=? WHERE ID = ?;";
@@ -530,6 +546,13 @@ public class ProgramGUI {
 							pstmt.setString(6, LectureGroupAdressNameText.getText());
 							pstmt.setInt(7, Integer.parseInt(LectureGroupIDText.getText()));
 							pstmt.executeUpdate();
+							}
+							catch(NumberFormatException e1)
+							{
+								LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+								LectureGroupResultText.setText(e1.getMessage());
+								return;
+							}
 						}
 						else
 						{
@@ -545,6 +568,12 @@ public class ProgramGUI {
 						}
 						LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
 						LectureGroupResultText.setText("Action Complete.");
+					}
+					catch(NumberFormatException e1)
+					{
+						LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						LectureGroupResultText.setText(e1.getMessage());
+						return;
 					}
 					catch (SQLException e1) {
 						LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -608,7 +637,6 @@ public class ProgramGUI {
 				}
 			});
 /************************Add information to text fields after click****************************************/
-			
 			listLecture.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
@@ -654,9 +682,8 @@ public class ProgramGUI {
 					CourseGroupTimeHourText.setText(String.valueOf(ClickedCourse.getTime_Hour()));
 				}	
 			});
-/***********************************************************************************/
 			
-
+/********************Extra queries GUI creations**********************************/
 
 			ShowFullSchedule.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -675,6 +702,7 @@ public class ProgramGUI {
 					qyeryAnswer.open();
 				}
 			});
+			
 			ClassInformaiton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
@@ -683,6 +711,7 @@ public class ProgramGUI {
 					qyeryAnswer.open();
 				}
 			});
+			
 			LectureClassCourseList.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 

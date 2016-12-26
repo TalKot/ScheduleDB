@@ -43,7 +43,7 @@ public class LecturesFrame {
 	protected void createContents() {
 		shell = new Shell();
 		shell.setSize(710, 456);
-		shell.setText("SWT Application");
+		shell.setText("Find Lectures that teach during input time");
 		
 		list = new List(shell, SWT.BORDER);
 		list.setBounds(10, 148, 674, 259);
@@ -104,7 +104,7 @@ public class LecturesFrame {
 			public void widgetSelected(SelectionEvent e) 
 			{
 				/*nesting of subqueries*/
-				String sqlQuery = "select * from course right JOIN teaching ON teaching.Course_CourseNumber=CourseNumber right JOIN lecture ON lecture.ID=Lecture_ID where Day>="+StartGroupDayText.getText()+" and Day<="+EndGroupDayText.getText()+" and CourseNumber in (select CourseNumber from course where Time_Hour>="+StartGroupHourText.getText()+" and Time_Hour<="+EndGroupHourText.getText()+");";
+				String sqlQuery="SELECT * FROM teaching JOIN lecture on ID=teaching.Lecture_ID WHERE((teaching.Course_CourseNumber) IN (SELECT course.CourseNumber FROM course WHERE (course.Day>="+StartGroupDayText.getText()+" AND course.Day<"+EndGroupDayText.getText()+") OR (course.Day="+StartGroupDayText.getText()+" AND course.Time_Hour>"+StartGroupHourText.getText()+") OR (course.Day="+EndGroupDayText.getText()+" AND course.Time_Hour<"+EndGroupHourText.getText()+")))";
 				System.out.println(sqlQuery);
 				try {
 					list.removeAll();
