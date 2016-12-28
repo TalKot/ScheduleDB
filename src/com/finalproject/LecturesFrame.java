@@ -104,8 +104,7 @@ public class LecturesFrame {
 			public void widgetSelected(SelectionEvent e) 
 			{
 				/*nesting of subqueries*/
-				String sqlQuery="SELECT * FROM teaching JOIN lecture on ID=teaching.Lecture_ID WHERE((teaching.Course_CourseNumber) IN (SELECT course.CourseNumber FROM course WHERE (course.Day>="+StartGroupDayText.getText()+" AND course.Day<"+EndGroupDayText.getText()+") OR (course.Day="+StartGroupDayText.getText()+" AND course.Time_Hour>"+StartGroupHourText.getText()+") OR (course.Day="+EndGroupDayText.getText()+" AND course.Time_Hour<"+EndGroupHourText.getText()+")))";
-				System.out.println(sqlQuery);
+				String sqlQuery="SELECT * FROM teaching JOIN lecture on ID=teaching.Lecture_ID WHERE((teaching.Course_CourseNumber) IN (SELECT DISTINCT course.CourseNumber FROM course WHERE (course.Day>="+StartGroupDayText.getText()+" AND course.Day<"+EndGroupDayText.getText()+") OR (course.Day="+StartGroupDayText.getText()+" AND course.Time_Hour>"+StartGroupHourText.getText()+") OR (course.Day="+EndGroupDayText.getText()+" AND course.Time_Hour<"+EndGroupHourText.getText()+")))";
 				try {
 					list.removeAll();
 					lec = Connection2DB.Instance().getLecture(sqlQuery);
@@ -121,6 +120,5 @@ public class LecturesFrame {
 		});
 		btnNewButton.setBounds(10, 117, 75, 25);
 		btnNewButton.setText("Execute");
-
 	}
 }

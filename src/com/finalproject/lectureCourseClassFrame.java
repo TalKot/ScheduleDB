@@ -28,10 +28,6 @@ public class lectureCourseClassFrame {
 		}
 	}
 
-	/**
-	 * Create contents of the window.
-	 * @wbp.parser.entryPoint
-	 */
 	protected void createContents() {
 		shell = new Shell();
 		shell.setSize(720, 499);

@@ -61,12 +61,12 @@ public class Connection2DB {
 	{
 		statement = connection.createStatement();
 		/*creation of the tables*/
-		statement.execute("create table IF NOT EXISTS Class(ClassNumber int,BuildingNumber int,Floor int,PRIMARY KEY (ClassNumber))"); 		
-		statement.execute("create table IF NOT EXISTS Course(CourseNumber int,Name varchar(255), Semester CHAR,HourseAmount int,Year int,Day int,Time_Hour int,Time_Minute int,PRIMARY KEY (CourseNumber))");
-		statement.execute("create table IF NOT EXISTS Lecture(ID int,Name_FirstName varchar(255),Name_LastName varchar(255),Birthday DATE, Address_City varchar(255),Address_street_Number int,Address_Name varchar(255),PRIMARY KEY (ID))"); 		
+		statement.execute("create table IF NOT EXISTS Class(ClassNumber int not null,BuildingNumber int not null,Floor int not null,PRIMARY KEY (ClassNumber))"); 		
+		statement.execute("create table IF NOT EXISTS Course(CourseNumber int not null,Name varchar(255) not null, Semester CHAR not null,HourseAmount int not null,Year int not null,Day int not null,Time_Hour int not null,Time_Minute int not null,PRIMARY KEY (CourseNumber))");
+		statement.execute("create table IF NOT EXISTS Lecture(ID int not null,Name_FirstName varchar(255) not null,Name_LastName varchar(255) not null,Birthday DATE not null, Address_City varchar(255) not null,Address_street_Number int not null,Address_Name varchar(255) not null,PRIMARY KEY (ID))"); 		
 		statement.execute("create table IF NOT EXISTS Takeplace(Course_CourseNumber int, Class_ClassNumber int,PRIMARY KEY (Course_CourseNumber,Class_ClassNumber))");
-		statement.execute("create table IF NOT EXISTS Teaching(Course_CourseNumber int, Lecture_ID int,PRIMARY KEY (Course_CourseNumber,Lecture_ID));"); 
-		statement.execute("create table IF NOT EXISTS LecturePhone(ID int,PhoneNumber int ,PRIMARY KEY (PhoneNumber),FOREIGN KEY(ID) references Lecture(ID) ON DELETE CASCADE ON UPDATE CASCADE)"); 
+		statement.execute("create table IF NOT EXISTS Teaching(Course_CourseNumber int , Lecture_ID int,PRIMARY KEY (Course_CourseNumber,Lecture_ID));"); 
+		statement.execute("create table IF NOT EXISTS LecturePhone(ID int not null,PhoneNumber int ,PRIMARY KEY (PhoneNumber),FOREIGN KEY(ID) references Lecture(ID) ON DELETE CASCADE ON UPDATE CASCADE)"); 
 	}
 	
 	public void enterData() throws SQLException, ParseException
@@ -273,158 +273,200 @@ public class Connection2DB {
 	
 	public ArrayList<Classes> getClasses(String query) throws SQLException
 	{
-		if (query.equals(""))query = "SELECT * from class;";
-		connection=DriverManager.getConnection(protocol,USER,PASS);
-		connection.setAutoCommit(false);
-	    statement = connection.createStatement();
-	    ResultSet rs = statement.executeQuery(query);
-	    ArrayList<Classes> cls = new ArrayList<Classes>();
-	    while(rs.next())
-	    {
-	    	Classes classtemp = new Classes();
-	    	classtemp.setBuildingNumber(rs.getInt("BuildingNumber"));
-	    	classtemp.setClassNumber(rs.getInt("ClassNumber"));
-	    	classtemp.setFloor(rs.getInt("Floor"));
-	    	cls.add(classtemp);
-	    }
-	    connection.close();
-	    return cls;
+		try{
+			if (query.equals(""))query = "SELECT * from class;";
+			connection=DriverManager.getConnection(protocol,USER,PASS);
+			connection.setAutoCommit(false);
+		    statement = connection.createStatement();
+		    ResultSet rs = statement.executeQuery(query);
+		    ArrayList<Classes> cls = new ArrayList<Classes>();
+		    while(rs.next())
+		    {
+		    	Classes classtemp = new Classes();
+		    	classtemp.setBuildingNumber(rs.getInt("BuildingNumber"));
+		    	classtemp.setClassNumber(rs.getInt("ClassNumber"));
+		    	classtemp.setFloor(rs.getInt("Floor"));
+		    	cls.add(classtemp);
+		    }
+		    connection.close();
+		    return cls;
+		}
+		finally 	
+		{ 
+			if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
+			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
+		} 
 	}
 	
 	public ArrayList<Lecture> getLecture(String query) throws SQLException 	
 	{
-		if (query.equals(""))query = "SELECT * from lecture;";
-		connection=DriverManager.getConnection(protocol,USER,PASS);
-		connection.setAutoCommit(false);
-	    statement = connection.createStatement();
-	    ResultSet rs = statement.executeQuery(query);
-	    ArrayList<Lecture> crs = new ArrayList<Lecture>();
-	    while(rs.next())
-	    {
-	    	Lecture Lecturetemp = new Lecture();
-	    	Lecturetemp.setAdressCity(rs.getString("Address_City"));
-	    	Lecturetemp.setAdressName(rs.getString("Address_Name"));
-	    	Lecturetemp.setBirthday(rs.getDate("Birthday"));
-	    	Lecturetemp.setFirstName(rs.getString("Name_FirstName"));
-	    	Lecturetemp.setID(rs.getInt("ID"));
-	    	Lecturetemp.setLastName(rs.getString("Name_LastName"));
-	    	Lecturetemp.setAdressStreetNumber(rs.getInt("Address_street_Number"));
-	    	crs.add(Lecturetemp);
-	    }
-	    connection.close();
-	    return crs;
+		try{
+			if (query.equals(""))query = "SELECT * from lecture;";
+			connection=DriverManager.getConnection(protocol,USER,PASS);
+			connection.setAutoCommit(false);
+		    statement = connection.createStatement();
+		    ResultSet rs = statement.executeQuery(query);
+		    ArrayList<Lecture> crs = new ArrayList<Lecture>();
+		    while(rs.next())
+		    {
+		    	Lecture Lecturetemp = new Lecture();
+		    	Lecturetemp.setAdressCity(rs.getString("Address_City"));
+		    	Lecturetemp.setAdressName(rs.getString("Address_Name"));
+		    	Lecturetemp.setBirthday(rs.getDate("Birthday"));
+		    	Lecturetemp.setFirstName(rs.getString("Name_FirstName"));
+		    	Lecturetemp.setID(rs.getInt("ID"));
+		    	Lecturetemp.setLastName(rs.getString("Name_LastName"));
+		    	Lecturetemp.setAdressStreetNumber(rs.getInt("Address_street_Number"));
+		    	crs.add(Lecturetemp);
+		    }
+		    connection.close();
+		    return crs;
+		}
+		finally 	
+		{ 
+			if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
+			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
+		} 
 	}
 	
 	public ArrayList<Course> getCourse(String query) throws SQLException 	
 	{
-		if (query.equals(""))query = "SELECT * from course;";
-		connection=DriverManager.getConnection(protocol,USER,PASS);
-		connection.setAutoCommit(false);
-	    statement = connection.createStatement();
-	    ResultSet rs = statement.executeQuery(query);
-	    ArrayList<Course> crs = new ArrayList<Course>();
-	    while(rs.next())
-	    {
-	    	Course Coursetemp = new Course();
-	    	Coursetemp.setSemester(rs.getString("Semester"));
-	    	Coursetemp.setName(rs.getString("Name"));
-	    	Coursetemp.setCourseNumber(rs.getInt("CourseNumber"));
-	    	Coursetemp.setHourseAmount(rs.getInt("HourseAmount"));
-	    	Coursetemp.setYear(rs.getInt("Year"));
-	    	Coursetemp.setDay(rs.getInt("Day"));
-	    	Coursetemp.setTime_Hour(rs.getInt("Time_Hour"));
-	    	Coursetemp.setTime_Minute(rs.getInt("Time_Minute"));
-	    	crs.add(Coursetemp);
-	    }
-	    connection.close();
-	    return crs; 
+		try{
+			if (query.equals(""))query = "SELECT * from course;";
+			connection=DriverManager.getConnection(protocol,USER,PASS);
+			connection.setAutoCommit(false);
+		    statement = connection.createStatement();
+		    ResultSet rs = statement.executeQuery(query);
+		    ArrayList<Course> crs = new ArrayList<Course>();
+		    while(rs.next())
+		    {
+		    	Course Coursetemp = new Course();
+		    	Coursetemp.setSemester(rs.getString("Semester"));
+		    	Coursetemp.setName(rs.getString("Name"));
+		    	Coursetemp.setCourseNumber(rs.getInt("CourseNumber"));
+		    	Coursetemp.setHourseAmount(rs.getInt("HourseAmount"));
+		    	Coursetemp.setYear(rs.getInt("Year"));
+		    	Coursetemp.setDay(rs.getInt("Day"));
+		    	Coursetemp.setTime_Hour(rs.getInt("Time_Hour"));
+		    	Coursetemp.setTime_Minute(rs.getInt("Time_Minute"));
+		    	crs.add(Coursetemp);
+		    }
+		    connection.close();
+		    return crs; 
+		}
+		finally 	
+		{ 
+			if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
+			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
+		} 
 	}
 	
 	/*Answer to query about full schedule*/
 	public ArrayList<FullScheduleQuery> getSchedule() throws SQLException 	
 	{
-		connection=DriverManager.getConnection(protocol,USER,PASS);
-		connection.setAutoCommit(false);
-	    statement = connection.createStatement();
-	    String sql = "SELECT * FROM course left JOIN takeplace ON CourseNumber=takeplace.Course_CourseNumber left JOIN class ON ClassNumber=takeplace.Class_ClassNumber left JOIN teaching ON CourseNumber=teaching.Course_CourseNumber left JOIN lecture ON ID=teaching.Lecture_ID ORDER BY course.CourseNumber;";
-	    ResultSet rs = statement.executeQuery(sql);
-	    ArrayList<FullScheduleQuery> sch = new ArrayList<FullScheduleQuery>();
-	    while(rs.next())
-	    {   	
-	    	FullScheduleQuery schedule = new FullScheduleQuery();
-			//course information 
-	    	schedule.setCourseNumber(rs.getInt("CourseNumber"));
-	    	schedule.setName(rs.getString("Name"));
-	    	schedule.setSemester(rs.getString("Semester"));
-	    	schedule.setHoursAmount(rs.getInt("HourseAmount"));
-	    	schedule.setYear(rs.getInt("Year"));
-	    	schedule.setDay(rs.getInt("Day"));
-	    	schedule.setTime_Hour(rs.getInt("Time_Hour"));
-	    	schedule.setTime_Minute(rs.getInt("Time_Minute"));
-	    	//Lecture information
-	    	schedule.setLecture_ID(rs.getInt("Lecture_ID"));
-	    	schedule.setFirstName(rs.getString("Name_FirstName"));
-	    	schedule.setLastName(rs.getString("Name_LastName"));
-	    	schedule.setBirthday(rs.getDate("Birthday"));
-	    	schedule.setAdressCity(rs.getString("Address_City"));
-	    	schedule.setAdressStreetName(rs.getString("Address_Name"));
-	    	schedule.setAdressStreetNumber(rs.getInt("Address_street_Number"));
-	    	//class information
-	    	schedule.setFloor(rs.getInt("Floor"));
-	    	schedule.setBuildingNumber(rs.getInt("BuildingNumber"));
-	    	schedule.setClassNumber(rs.getInt("Class_ClassNumber"));
-	    	sch.add(schedule);
-	    }
-	    connection.close();
-	    return sch; 
+		try{
+			connection=DriverManager.getConnection(protocol,USER,PASS);
+			connection.setAutoCommit(false);
+		    statement = connection.createStatement();
+		    String sql = "SELECT * FROM course left JOIN takeplace ON CourseNumber=takeplace.Course_CourseNumber left JOIN class ON ClassNumber=takeplace.Class_ClassNumber left JOIN teaching ON CourseNumber=teaching.Course_CourseNumber left JOIN lecture ON ID=teaching.Lecture_ID ORDER BY course.CourseNumber;";
+		    ResultSet rs = statement.executeQuery(sql);
+		    ArrayList<FullScheduleQuery> sch = new ArrayList<FullScheduleQuery>();
+		    while(rs.next())
+		    {   	
+		    	FullScheduleQuery schedule = new FullScheduleQuery();
+				//course information 
+		    	schedule.setCourseNumber(rs.getInt("CourseNumber"));
+		    	schedule.setName(rs.getString("Name"));
+		    	schedule.setSemester(rs.getString("Semester"));
+		    	schedule.setHoursAmount(rs.getInt("HourseAmount"));
+		    	schedule.setYear(rs.getInt("Year"));
+		    	schedule.setDay(rs.getInt("Day"));
+		    	schedule.setTime_Hour(rs.getInt("Time_Hour"));
+		    	schedule.setTime_Minute(rs.getInt("Time_Minute"));
+		    	//Lecture information
+		    	schedule.setLecture_ID(rs.getInt("Lecture_ID"));
+		    	schedule.setFirstName(rs.getString("Name_FirstName"));
+		    	schedule.setLastName(rs.getString("Name_LastName"));
+		    	schedule.setBirthday(rs.getDate("Birthday"));
+		    	schedule.setAdressCity(rs.getString("Address_City"));
+		    	schedule.setAdressStreetName(rs.getString("Address_Name"));
+		    	schedule.setAdressStreetNumber(rs.getInt("Address_street_Number"));
+		    	//class information
+		    	schedule.setFloor(rs.getInt("Floor"));
+		    	schedule.setBuildingNumber(rs.getInt("BuildingNumber"));
+		    	schedule.setClassNumber(rs.getInt("Class_ClassNumber"));
+		    	sch.add(schedule);
+		    }
+		    connection.close();
+		    return sch; 
+		}
+		finally 	
+		{ 
+			if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
+			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
+		} 
 	}
 	
 	
 	public ArrayList<ClassInformationQuery> getClassInformation() throws SQLException 	
 	{
-		connection=DriverManager.getConnection(protocol,USER,PASS);
-		connection.setAutoCommit(false);
-	    statement = connection.createStatement();
-	    String sql= "SELECT * FROM takeplace right JOIN teaching ON teaching.Course_CourseNumber=takeplace.Course_CourseNumber ORDER BY takeplace.Class_ClassNumber;";
-	    ResultSet rs = statement.executeQuery(sql);
-	    ArrayList<ClassInformationQuery> sch = new ArrayList<ClassInformationQuery>();
-	    while(rs.next())
-	    {   	
-	    	ClassInformationQuery classData = new ClassInformationQuery();
-	    	classData.setClassNumber(rs.getInt("Class_ClassNumber"));
-	    	classData.setCourseNumber(rs.getInt("Course_CourseNumber"));
-	    	classData.setLectureID(rs.getInt("Lecture_ID"));
-	    	sch.add(classData);
-	    }
-	    connection.close();
-	    return sch; 
+		try{
+			connection=DriverManager.getConnection(protocol,USER,PASS);
+			connection.setAutoCommit(false);
+		    statement = connection.createStatement();
+		    String sql= "SELECT * FROM takeplace right JOIN teaching ON teaching.Course_CourseNumber=takeplace.Course_CourseNumber ORDER BY takeplace.Class_ClassNumber;";
+		    ResultSet rs = statement.executeQuery(sql);
+		    ArrayList<ClassInformationQuery> sch = new ArrayList<ClassInformationQuery>();
+		    while(rs.next())
+		    {   	
+		    	ClassInformationQuery classData = new ClassInformationQuery();
+		    	classData.setClassNumber(rs.getInt("Class_ClassNumber"));
+		    	classData.setCourseNumber(rs.getInt("Course_CourseNumber"));
+		    	classData.setLectureID(rs.getInt("Lecture_ID"));
+		    	sch.add(classData);
+		    }
+		    connection.close();
+		    return sch; 
+		}
+		finally 	
+		{ 
+			if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
+			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
+		} 
 	}
 
 	
 	//need to complete the object below
 	public ArrayList<lectureCourseClassQuery> getClassCourseList() throws SQLException 	
 	{
-		connection=DriverManager.getConnection(protocol,USER,PASS);
-		connection.setAutoCommit(false);
-	    statement = connection.createStatement();
-	    String sql= "SELECT teaching.Lecture_ID, course.*,takeplace.Class_ClassNumber FROM course JOIN teaching ON course.CourseNumber=teaching.Course_CourseNumber JOIN takeplace ON course.CourseNumber=takeplace.Course_CourseNumber;";
-	    ResultSet rs = statement.executeQuery(sql);
-	    ArrayList<lectureCourseClassQuery> lectureCourseClasslist = new ArrayList<lectureCourseClassQuery>();
-	    while(rs.next())
-	    {   	
-	    	lectureCourseClassQuery lectureCourseClassobject = new lectureCourseClassQuery();
-	    	lectureCourseClassobject.setID(rs.getInt("Lecture_ID"));
-	    	lectureCourseClassobject.setCourseNumber(rs.getInt("CourseNumber"));
-	    	lectureCourseClassobject.setCourseName(rs.getString("Name"));
-	    	lectureCourseClassobject.setClassNumber(rs.getInt("Class_ClassNumber"));
-	    	lectureCourseClassobject.setDay(rs.getInt("Day"));
-	    	lectureCourseClassobject.setHourseAmount(rs.getInt("HourseAmount"));
-	    	lectureCourseClassobject.setTimeHour(rs.getInt("Time_Hour"));
-	    	lectureCourseClassobject.setTimeMinute(rs.getInt("Time_Minute"));
-	    	lectureCourseClassobject.setYear(rs.getInt("Year"));
-	    	lectureCourseClasslist.add(lectureCourseClassobject);
-	    }
-	    connection.close();
-	    return lectureCourseClasslist; 
+		try{
+			connection=DriverManager.getConnection(protocol,USER,PASS);
+			connection.setAutoCommit(false);
+		    statement = connection.createStatement();
+		    String sql= "SELECT teaching.Lecture_ID, course.*,takeplace.Class_ClassNumber FROM course JOIN teaching ON course.CourseNumber=teaching.Course_CourseNumber JOIN takeplace ON course.CourseNumber=takeplace.Course_CourseNumber;";
+		    ResultSet rs = statement.executeQuery(sql);
+		    ArrayList<lectureCourseClassQuery> lectureCourseClasslist = new ArrayList<lectureCourseClassQuery>();
+		    while(rs.next())
+		    {   	
+		    	lectureCourseClassQuery lectureCourseClassobject = new lectureCourseClassQuery();
+		    	lectureCourseClassobject.setID(rs.getInt("Lecture_ID"));
+		    	lectureCourseClassobject.setCourseNumber(rs.getInt("CourseNumber"));
+		    	lectureCourseClassobject.setCourseName(rs.getString("Name"));
+		    	lectureCourseClassobject.setClassNumber(rs.getInt("Class_ClassNumber"));
+		    	lectureCourseClassobject.setDay(rs.getInt("Day"));
+		    	lectureCourseClassobject.setHourseAmount(rs.getInt("HourseAmount"));
+		    	lectureCourseClassobject.setTimeHour(rs.getInt("Time_Hour"));
+		    	lectureCourseClassobject.setTimeMinute(rs.getInt("Time_Minute"));
+		    	lectureCourseClassobject.setYear(rs.getInt("Year"));
+		    	lectureCourseClasslist.add(lectureCourseClassobject);
+		    }
+		    connection.close();
+		    return lectureCourseClasslist; 
+		}
+		finally 	
+		{ 
+			if(statement!=null) try{statement.close();}catch(Exception e){e.printStackTrace();} 
+			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
+		} 
 	}
 }
