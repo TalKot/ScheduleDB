@@ -7,6 +7,18 @@ public class Course
 	private String Semester;
 	private int HourseAmount;
 	private int Year;
+	
+	public Course(int courseNumber, String name, String semester, int hourseAmount, int year, int day, int time_Hour,int time_Minute) 
+	{
+		this.setCourseNumber(courseNumber);
+		this.setName(name);
+		this.setSemester(semester);
+		this.setHourseAmount(hourseAmount);
+		this.setYear(year);
+		this.setDay(day);
+		this.setTime_Hour(time_Hour);
+		this.setTime_Minute(time_Minute);
+	}
 	private int Day;
 	private int Time_Hour;
 	private int Time_Minute;

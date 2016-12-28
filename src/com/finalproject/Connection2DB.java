@@ -1,6 +1,7 @@
 package com.finalproject;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -192,7 +193,7 @@ public class Connection2DB {
 		pstmt.setString( 3, "Davids" ); 
 		sqlDate = new java.sql.Date( myDate.getTime() );
 		pstmt.setDate( 4, sqlDate ); 
-		pstmt.setString(5, "Ofakim");
+		pstmt.setString(5, "Ofakim7");
 		pstmt.setInt(6, 18);
 		pstmt.setString(7, "Arlozrov");
 		pstmt.executeUpdate();
@@ -282,11 +283,7 @@ public class Connection2DB {
 		    ArrayList<Classes> cls = new ArrayList<Classes>();
 		    while(rs.next())
 		    {
-		    	Classes classtemp = new Classes();
-		    	classtemp.setBuildingNumber(rs.getInt("BuildingNumber"));
-		    	classtemp.setClassNumber(rs.getInt("ClassNumber"));
-		    	classtemp.setFloor(rs.getInt("Floor"));
-		    	cls.add(classtemp);
+		    	cls.add(new Classes(rs.getInt("ClassNumber"),rs.getInt("BuildingNumber"),rs.getInt("Floor")));
 		    }
 		    connection.close();
 		    return cls;
@@ -309,15 +306,7 @@ public class Connection2DB {
 		    ArrayList<Lecture> crs = new ArrayList<Lecture>();
 		    while(rs.next())
 		    {
-		    	Lecture Lecturetemp = new Lecture();
-		    	Lecturetemp.setAdressCity(rs.getString("Address_City"));
-		    	Lecturetemp.setAdressName(rs.getString("Address_Name"));
-		    	Lecturetemp.setBirthday(rs.getDate("Birthday"));
-		    	Lecturetemp.setFirstName(rs.getString("Name_FirstName"));
-		    	Lecturetemp.setID(rs.getInt("ID"));
-		    	Lecturetemp.setLastName(rs.getString("Name_LastName"));
-		    	Lecturetemp.setAdressStreetNumber(rs.getInt("Address_street_Number"));
-		    	crs.add(Lecturetemp);
+				crs.add(new Lecture(rs.getInt("ID"),rs.getString("Name_FirstName"),rs.getString("Name_LastName"),rs.getDate("Birthday"),rs.getString("Address_City"),rs.getInt("Address_street_Number"),rs.getString("Address_Name"))); 	    	
 		    }
 		    connection.close();
 		    return crs;
@@ -340,16 +329,7 @@ public class Connection2DB {
 		    ArrayList<Course> crs = new ArrayList<Course>();
 		    while(rs.next())
 		    {
-		    	Course Coursetemp = new Course();
-		    	Coursetemp.setSemester(rs.getString("Semester"));
-		    	Coursetemp.setName(rs.getString("Name"));
-		    	Coursetemp.setCourseNumber(rs.getInt("CourseNumber"));
-		    	Coursetemp.setHourseAmount(rs.getInt("HourseAmount"));
-		    	Coursetemp.setYear(rs.getInt("Year"));
-		    	Coursetemp.setDay(rs.getInt("Day"));
-		    	Coursetemp.setTime_Hour(rs.getInt("Time_Hour"));
-		    	Coursetemp.setTime_Minute(rs.getInt("Time_Minute"));
-		    	crs.add(Coursetemp);
+		    	crs.add(new Course(rs.getInt("CourseNumber"),rs.getString("Name"),rs.getString("Semester"),rs.getInt("HourseAmount"),rs.getInt("Year"),rs.getInt("Day"),rs.getInt("Time_Hour"),rs.getInt("Time_Minute"))); 	
 		    }
 		    connection.close();
 		    return crs; 

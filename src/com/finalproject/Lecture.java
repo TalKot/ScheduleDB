@@ -11,6 +11,16 @@ public class Lecture {
 	private int AdressStreetNumber;
 	private String AdressName;
 
+	public Lecture(int id, String FirstName,String LastName, Date birthdate,String AdressCity, int addressNumber, String AdressName )
+	{
+		this.setID(id);
+		this.setFirstName(FirstName);
+		this.setLastName(LastName);
+		this.setBirthday(birthdate);
+		this.setAdressCity(AdressCity);
+		this.setAdressStreetNumber(addressNumber);
+		this.setAdressName(AdressName);
+	}
 	public int getID() {
 		return ID;
 	}
@@ -50,8 +60,8 @@ public class Lecture {
 	}
 	@Override
 	public String toString() {
-		return  FirstName + " " + LastName +",ID=" + ID + ", Birthday="
-				+ Birthday+ ", Adress="
+		return  FirstName + " " + LastName +"," + ID + ", Birthday="
+				+ Birthday+ ","
 				 +AdressName+" "+ AdressStreetNumber +"," + AdressCity;
 	}
 	public Date getBirthday() {

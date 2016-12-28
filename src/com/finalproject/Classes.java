@@ -4,6 +4,12 @@ public class Classes {
 	private int classNumber;
 	private int BuildingNumber;
 	private int Floor;
+	
+	public Classes(int classNumber, int buildingNumber, int floor) {
+		this.setClassNumber(classNumber);
+		this.setBuildingNumber(buildingNumber);
+		this.setFloor(floor);
+	}
 	public int getClassNumber() {
 		return classNumber;
 	}
