@@ -385,6 +385,12 @@ public class ProgramGUI {
 						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
 						ClassGroupResultText.setText("Action Complete.");
 					}
+					catch(NumberFormatException e1)
+					{
+						ClassGroupResultText.setText(e1.getMessage());
+						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						return;
+					}
 					catch (SQLException e1) 
 					{
 						ClassGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -423,7 +429,6 @@ public class ProgramGUI {
 						}	
 						else if (CourseGroupChooseInsert.getSelection())//Course Insert option
 						{
-							try{
 							PreparedStatement pStmt = Connection2DB.Instance().getConnection().prepareStatement("INSERT INTO Course(CourseNumber,Name, Semester ,HourseAmount ,Year ,Day ,Time_Hour,Time_Minute) VALUES (?,?,?,?,?,?,?,?);");				
 							pStmt.setInt(1,Integer.parseInt(CourseGroupCourseNumberText.getText()));
 							pStmt.setString(2,CourseGroupCourseNameText.getText());
@@ -435,13 +440,7 @@ public class ProgramGUI {
 							pStmt.setInt(8,Integer.parseInt(CourseGroupTimeMinuteText.getText()));
 							pStmt.executeUpdate();
 							pStmt.close();
-							}
-							catch(NumberFormatException e1)
-							{
-								CourseGroupResultText.setText(e1.getMessage());
-								CourseGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-								return;
-							}
+
 						}
 						else if(CourseGroupChooseUpdate.getSelection())//Course Update option
 						{
@@ -532,7 +531,6 @@ public class ProgramGUI {
 						}
 						else if(LectureGroupChooseUpdate.getSelection())//Lecture Update option
 						{
-							try{
 							SimpleDateFormat format = new SimpleDateFormat( "MM/dd/yyyy" );  
 							java.util.Date myDate = format.parse( LectureGroupBirthdayMonthText.getText()+"/"+LectureGroupBirthdayDayText.getText()+"/"+LectureGroupBirthdayYearText.getText()); 
 							String query = "UPDATE lecture SET Name_FirstName=?,Name_LastName=?,Birthday=?, Address_City=?,Address_street_Number=?,Address_Name=? WHERE ID = ?;";
@@ -546,13 +544,6 @@ public class ProgramGUI {
 							pstmt.setString(6, LectureGroupAdressNameText.getText());
 							pstmt.setInt(7, Integer.parseInt(LectureGroupIDText.getText()));
 							pstmt.executeUpdate();
-							}
-							catch(NumberFormatException e1)
-							{
-								LectureGroupResultText.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-								LectureGroupResultText.setText(e1.getMessage());
-								return;
-							}
 						}
 						else
 						{
@@ -640,7 +631,7 @@ public class ProgramGUI {
 			listLecture.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
-				{
+				{	try{
 					Lecture ClickedLecture  = lec.get(listLecture.getSelectionIndex());
 					String birthday = ClickedLecture.getBirthday().toString();
 					String[] dates=birthday.split("-");
@@ -652,7 +643,9 @@ public class ProgramGUI {
 					LectureGroupBirthdayDayText.setText(dates[2]);
 					LectureGroupBirthdayMonthText.setText(dates[1]);
 					LectureGroupBirthdayYearText.setText(dates[0]);
-					LectureGroupAdressNumberText.setText(String.valueOf(ClickedLecture.getAdressStreetNumber()));											
+					LectureGroupAdressNumberText.setText(String.valueOf(ClickedLecture.getAdressStreetNumber()));	
+					}
+					catch(Exception e1){/*e1.printStackTrace();*/}
 				}	
 			});
 			
@@ -660,10 +653,13 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
+					try{
 					Classes ClickedClass = cls.get(listClass.getSelectionIndex());
 					ClassGroupBuildingNumberText.setText(String.valueOf(ClickedClass.getBuildingNumber()));
 					ClassGroupClassNumberText.setText(String.valueOf(ClickedClass.getClassNumber()));
 					ClassGroupFloorText.setText(String.valueOf(ClickedClass.getFloor()));
+					}
+					catch(Exception e1){/*e1.printStackTrace();*/}
 				}	
 			});
 			
@@ -671,6 +667,7 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
+					try{
 					Course ClickedCourse = crs.get(listCourse.getSelectionIndex());
 					CourseGroupCourseNumberText.setText(String.valueOf(ClickedCourse.getCourseNumber()));
 					CourseGroupCourseNameText.setText(ClickedCourse.getName());
@@ -680,6 +677,8 @@ public class ProgramGUI {
 					CourseGroupYearText.setText(String.valueOf(ClickedCourse.getYear()));
 					CourseGroupTimeMinuteText.setText(String.valueOf(ClickedCourse.getTime_Minute()));
 					CourseGroupTimeHourText.setText(String.valueOf(ClickedCourse.getTime_Hour()));
+					}
+					catch(Exception e1){/*e1.printStackTrace();*/}
 				}	
 			});
 			
@@ -689,8 +688,11 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
-					FullScheduleFrame qyeryAnswer = new FullScheduleFrame();
-					qyeryAnswer.open();
+					try{
+						FullScheduleFrame qyeryAnswer = new FullScheduleFrame();
+						qyeryAnswer.open();
+					}
+					catch(Exception e1){e1.printStackTrace();}
 				}
 			});
 
@@ -698,8 +700,11 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e)
 				{
-					LecturesFrame qyeryAnswer = new LecturesFrame();
-					qyeryAnswer.open();
+					try{
+						LecturesFrame qyeryAnswer = new LecturesFrame();
+						qyeryAnswer.open();
+					}		
+					catch(Exception e1){e1.printStackTrace();}
 				}
 			});
 			
@@ -707,8 +712,11 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
+					try{
 					ClassInformationFrame qyeryAnswer = new ClassInformationFrame();
 					qyeryAnswer.open();
+					}
+					catch(Exception e1){e1.printStackTrace();}
 				}
 			});
 			
@@ -716,8 +724,11 @@ public class ProgramGUI {
 				@Override
 				public void widgetSelected(SelectionEvent e) 
 				{
+					try{
 					lectureCourseClassFrame qyeryAnswer = new lectureCourseClassFrame();
 					qyeryAnswer.open();
+					}
+					catch(Exception e1){e1.printStackTrace();}
 				}
 			});
 		}
