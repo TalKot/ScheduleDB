@@ -398,12 +398,8 @@ public class Connection2DB {
 		    ResultSet rs = statement.executeQuery(sql);
 		    ArrayList<ClassInformationQuery> sch = new ArrayList<ClassInformationQuery>();
 		    while(rs.next())
-		    {   	
-		    	ClassInformationQuery classData = new ClassInformationQuery();
-		    	classData.setClassNumber(rs.getInt("Class_ClassNumber"));
-		    	classData.setCourseNumber(rs.getInt("Course_CourseNumber"));
-		    	classData.setLectureID(rs.getInt("Lecture_ID"));
-		    	sch.add(classData);
+		    {   
+				sch.add(new ClassInformationQuery(rs.getInt("Class_ClassNumber"),rs.getInt("Lecture_ID"),rs.getInt("Course_CourseNumber")));
 		    }
 		    connection.close();
 		    return sch; 
@@ -428,17 +424,7 @@ public class Connection2DB {
 		    ArrayList<lectureCourseClassQuery> lectureCourseClasslist = new ArrayList<lectureCourseClassQuery>();
 		    while(rs.next())
 		    {   	
-		    	lectureCourseClassQuery lectureCourseClassobject = new lectureCourseClassQuery();
-		    	lectureCourseClassobject.setID(rs.getInt("Lecture_ID"));
-		    	lectureCourseClassobject.setCourseNumber(rs.getInt("CourseNumber"));
-		    	lectureCourseClassobject.setCourseName(rs.getString("Name"));
-		    	lectureCourseClassobject.setClassNumber(rs.getInt("Class_ClassNumber"));
-		    	lectureCourseClassobject.setDay(rs.getInt("Day"));
-		    	lectureCourseClassobject.setHourseAmount(rs.getInt("HourseAmount"));
-		    	lectureCourseClassobject.setTimeHour(rs.getInt("Time_Hour"));
-		    	lectureCourseClassobject.setTimeMinute(rs.getInt("Time_Minute"));
-		    	lectureCourseClassobject.setYear(rs.getInt("Year"));
-		    	lectureCourseClasslist.add(lectureCourseClassobject);
+		    	lectureCourseClasslist.add(new lectureCourseClassQuery(rs.getInt("Lecture_ID"),rs.getInt("CourseNumber"),rs.getInt("HourseAmount"),rs.getInt("Year"),rs.getInt("Day"),rs.getInt("Time_Hour"),rs.getInt("Time_Minute"),rs.getInt("Class_ClassNumber"),rs.getString("Name")));
 		    }
 		    connection.close();
 		    return lectureCourseClasslist; 

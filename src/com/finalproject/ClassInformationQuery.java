@@ -3,6 +3,11 @@ package com.finalproject;
 public class ClassInformationQuery {
 		private int classNumber,LectureID,CourseNumber;
 
+		public ClassInformationQuery(int classNumber, int lectureID, int courseNumber) {
+			this.setClassNumber(classNumber);
+			this.setLectureID(lectureID);
+			this.setCourseNumber(courseNumber);
+		}
 
 		public int getClassNumber() {
 			return classNumber;

@@ -4,6 +4,20 @@ public class lectureCourseClassQuery {
 	private int ID,CourseNumber,HourseAmount,Year,Day,TimeHour,TimeMinute,ClassNumber;
 	private String CourseName;
 
+	public lectureCourseClassQuery(int iD, int courseNumber, int hourseAmount, int year, int day, int timeHour,
+			int timeMinute, int classNumber, String courseName) {
+
+		this.setID(iD);
+		this.setCourseNumber(courseNumber);
+		this.setHourseAmount(hourseAmount);
+		this.setYear(year);
+		this.setDay(day);
+		this.setTimeHour(timeHour);
+		this.setTimeMinute(timeMinute);
+		this.setClassNumber(classNumber);
+		this.setCourseName(courseName);
+	}
+	
 	public int getID() {
 		return ID;
 	}
