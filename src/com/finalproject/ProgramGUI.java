@@ -6,6 +6,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import java.sql.SQLException;
@@ -680,6 +682,15 @@ public class ProgramGUI {
 					}
 					catch(Exception e1){/*e1.printStackTrace();*/}
 				}	
+			});
+			
+			listLecture.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					Lecture ClickedLecture  = lec.get(listLecture.getSelectionIndex());
+					LecturesPhonesFrame qyeryAnswer = new LecturesPhonesFrame(ClickedLecture.getID());
+					qyeryAnswer.open();
+				}
 			});
 			
 /********************Extra queries GUI creations**********************************/

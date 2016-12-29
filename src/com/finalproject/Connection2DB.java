@@ -301,10 +301,10 @@ public class Connection2DB {
 			if (query.equals(""))query = "SELECT * from lecture;";
 			connection=DriverManager.getConnection(protocol,USER,PASS);
 			connection.setAutoCommit(false);
-		    statement = connection.createStatement();
-		    ResultSet rs = statement.executeQuery(query);
-		    ArrayList<Lecture> crs = new ArrayList<Lecture>();
-		    while(rs.next())
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			ArrayList<Lecture> crs = new ArrayList<Lecture>();
+			while(rs.next())
 		    {
 				crs.add(new Lecture(rs.getInt("ID"),rs.getString("Name_FirstName"),rs.getString("Name_LastName"),rs.getDate("Birthday"),rs.getString("Address_City"),rs.getInt("Address_street_Number"),rs.getString("Address_Name"))); 	    	
 		    }
@@ -435,4 +435,22 @@ public class Connection2DB {
 			if(connection!=null) try{connection.close();}catch(Exception e){e.printStackTrace();} 	
 		} 
 	}
+	
+
+	public ArrayList<LecturesPhonesQuery> getLecturesPhoneslist(int lectureID) throws SQLException 	
+	{
+		connection=DriverManager.getConnection(protocol,USER,PASS);
+		connection.setAutoCommit(false);
+	    statement = connection.createStatement();
+	    String query = "SELECT * FROM abcd.lecturephone join lecture on lecture.ID=lecturephone.ID WHERE lecture.ID= "+lectureID;
+	    ResultSet rs = statement.executeQuery(query);
+	    ArrayList<LecturesPhonesQuery> lecturesphoneslist = new ArrayList<LecturesPhonesQuery>();
+	    while(rs.next())
+	    {   	    		
+	    	lecturesphoneslist.add(new LecturesPhonesQuery(rs.getInt("PhoneNumber"),rs.getString("Name_FirstName"),rs.getString("Name_LastName")));	
+	    }
+	    connection.close();
+	    return lecturesphoneslist; 
+	}
+	
 }
